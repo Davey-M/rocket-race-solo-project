@@ -34,25 +34,27 @@ function LoginForm() {
       )}
       <div>
         <label htmlFor='username'>
-          <p style={{ display: 'inline-block' }}>Username:</p>
+          {/* <p style={{ display: 'inline-block' }}>Username:</p> */}
           <input
             type='text'
             name='username'
             required
             value={username}
             onChange={(event) => setUsername(event.target.value)}
+            placeholder='Username'
           />
         </label>
       </div>
       <div>
         <label htmlFor='password'>
-          <p style={{ display: 'inline-block' }}>Password:</p>
+          {/* <p style={{ display: 'inline-block' }}>Password:</p> */}
           <input
             type='password'
             name='password'
             required
             value={password}
             onChange={(event) => setPassword(event.target.value)}
+            placeholder='Password'
           />
         </label>
       </div>

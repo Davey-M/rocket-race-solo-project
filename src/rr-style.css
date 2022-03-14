@@ -171,6 +171,21 @@ button.free:active {
 
 /* buttons */
 
+/* inputs */
+input {
+  padding: 5px;
+  background-color: var(--dark-3);
+  border: none;
+  border-bottom: 5px solid var(--blue-1);
+}
+
+input:focus-visible {
+  outline-color: var(--red-1);
+  /* outline: none; */
+  outline: 1px solid var(--red-1);
+}
+/* inputs */
+
 /* cards */
 .card {
   padding: 10px;

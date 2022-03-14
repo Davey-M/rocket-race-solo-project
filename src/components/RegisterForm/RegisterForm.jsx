@@ -29,25 +29,27 @@ function RegisterForm() {
       )}
       <div>
         <label htmlFor='username'>
-          Username:
+          {/* Username: */}
           <input
             type='text'
             name='username'
             value={username}
             required
             onChange={(event) => setUsername(event.target.value)}
+            placeholder='Username'
           />
         </label>
       </div>
       <div>
         <label htmlFor='password'>
-          Password:
+          {/* Password: */}
           <input
             type='password'
             name='password'
             value={password}
             required
             onChange={(event) => setPassword(event.target.value)}
+            placeholder='Password'
           />
         </label>
       </div>
