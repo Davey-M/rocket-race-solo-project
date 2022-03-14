@@ -25,7 +25,9 @@ import './App.css';
 import { io } from 'socket.io-client';
 
 function App() {
+  // instantiate the socket instance
   const socket = io();
+
   const dispatch = useDispatch();
 
   const user = useSelector((store) => store.user);
@@ -35,8 +37,9 @@ function App() {
   }, [dispatch]);
 
   useEffect(() => {
+    // set the socket id in a reducer on connect
     socket.on('connect', () => {
-      console.log(socket.id);
+      // console.log(socket.id); // test
       dispatch({
         type: 'SET_SOCKET_ID',
         payload: socket.id,
