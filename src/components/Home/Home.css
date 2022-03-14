@@ -2,10 +2,30 @@
   margin-top: 20vh;
 }
 
+@keyframes slide-right {
+  from {
+    margin-left: -100%;
+  }
+  to {
+    margin-left: 0%;
+  }
+}
+
+@keyframes slide-left {
+  from {
+    margin-right: -100%;
+  }
+  to {
+    margin-right: 0%;
+  }
+}
+
 .blue-header {
   position: relative;
   text-align: right;
   width: 80%;
+
+  animation: slide-right 1s ease-out;
 }
 
 .blue-header h1 {
@@ -15,6 +35,8 @@
 .red-header {
   width: 70%;
   margin-left: auto;
+
+  animation: slide-left 1s ease-out;
 }
 
 .red-header h1 {
