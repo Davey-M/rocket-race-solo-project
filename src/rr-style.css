@@ -173,10 +173,10 @@ button.free:active {
 
 /* inputs */
 input {
-  padding: 5px;
+  padding: 10px;
   background-color: var(--dark-3);
   border: none;
-  border-bottom: 5px solid var(--blue-1);
+  /* border-bottom: 5px solid var(--blue-1); */
 }
 
 input:focus-visible {
