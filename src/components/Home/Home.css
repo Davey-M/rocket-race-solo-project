@@ -1,0 +1,27 @@
+.home-page-container {
+  margin-top: 20vh;
+}
+
+.blue-header {
+  position: relative;
+  text-align: right;
+  width: 80%;
+}
+
+.blue-header h1 {
+  padding-right: 30%;
+}
+
+.red-header {
+  width: 70%;
+  margin-left: auto;
+}
+
+.red-header h1 {
+  padding-left: 20%;
+}
+
+.sub-header {
+  text-align: center;
+  margin-top: 20vh;
+}
