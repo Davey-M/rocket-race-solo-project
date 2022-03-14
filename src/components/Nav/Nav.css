@@ -7,6 +7,8 @@
   /* overflow: hidden; */
 
   padding: 0px 20px;
+
+  align-items: center;
 }
 
 .nav .mid-links {
@@ -30,7 +32,6 @@
 
 .navLink {
   display: inline-block;
-  color: var(--blue-3);
   text-align: center;
   /* padding: 24px 10px; */
   text-decoration: none;
@@ -43,10 +44,42 @@
   outline: 0;
 }
 
-.navLink:hover {
+.navLink:hover p {
   color: var(--blue-2);
+}
+
+.navLink p {
+  color: var(--blue-3);
 }
 
 /* .navLink:hover {
   background-color: #008183;
 } */
+
+.toggleImage {
+  width: 50px;
+  height: 50px;
+
+  background-color: var(--red-3);
+  margin: 5px 0px 5px auto;
+}
+
+.dropdownToggle {
+  position: relative;
+}
+
+.dropdown {
+  position: absolute;
+  top: 0px;
+  right: 0;
+  min-width: 100px;
+  background-color: white;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.dropdown p {
+  color: var(--dark-1);
+}
