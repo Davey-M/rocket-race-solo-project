@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
 function LoginForm() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const errors = useSelector(store => store.errors);
+  const errors = useSelector((store) => store.errors);
   const dispatch = useDispatch();
 
   const login = (event) => {
@@ -25,39 +25,43 @@ function LoginForm() {
   }; // end login
 
   return (
-    <form className="formPanel" onSubmit={login}>
+    <form className='formPanel card shadow' onSubmit={login}>
       <h2>Login</h2>
       {errors.loginMessage && (
-        <h3 className="alert" role="alert">
+        <h3 className='alert' role='alert'>
           {errors.loginMessage}
         </h3>
       )}
       <div>
-        <label htmlFor="username">
-          Username:
+        <label htmlFor='username'>
+          {/* <p style={{ display: 'inline-block' }}>Username:</p> */}
           <input
-            type="text"
-            name="username"
+            type='text'
+            name='username'
             required
             value={username}
             onChange={(event) => setUsername(event.target.value)}
+            placeholder='Username'
           />
         </label>
       </div>
       <div>
-        <label htmlFor="password">
-          Password:
+        <label htmlFor='password'>
+          {/* <p style={{ display: 'inline-block' }}>Password:</p> */}
           <input
-            type="password"
-            name="password"
+            type='password'
+            name='password'
             required
             value={password}
             onChange={(event) => setPassword(event.target.value)}
+            placeholder='Password'
           />
         </label>
       </div>
       <div>
-        <input className="btn" type="submit" name="submit" value="Log In" />
+        <button type='submit' name='submit'>
+          Login
+        </button>
       </div>
     </form>
   );

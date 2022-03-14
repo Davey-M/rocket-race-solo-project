@@ -20,39 +20,43 @@ function RegisterForm() {
   }; // end registerUser
 
   return (
-    <form className="formPanel" onSubmit={registerUser}>
+    <form className='formPanel card shadow' onSubmit={registerUser}>
       <h2>Register User</h2>
       {errors.registrationMessage && (
-        <h3 className="alert" role="alert">
+        <h3 className='alert' role='alert'>
           {errors.registrationMessage}
         </h3>
       )}
       <div>
-        <label htmlFor="username">
-          Username:
+        <label htmlFor='username'>
+          {/* Username: */}
           <input
-            type="text"
-            name="username"
+            type='text'
+            name='username'
             value={username}
             required
             onChange={(event) => setUsername(event.target.value)}
+            placeholder='Username'
           />
         </label>
       </div>
       <div>
-        <label htmlFor="password">
-          Password:
+        <label htmlFor='password'>
+          {/* Password: */}
           <input
-            type="password"
-            name="password"
+            type='password'
+            name='password'
             value={password}
             required
             onChange={(event) => setPassword(event.target.value)}
+            placeholder='Password'
           />
         </label>
       </div>
       <div>
-        <input className="btn" type="submit" name="submit" value="Register" />
+        <button type='submit' name='submit'>
+          Register
+        </button>
       </div>
     </form>
   );
