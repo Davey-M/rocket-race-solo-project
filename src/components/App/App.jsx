@@ -22,14 +22,27 @@ import RegisterPage from '../RegisterPage/RegisterPage';
 
 import './App.css';
 
+import { io } from 'socket.io-client';
+
 function App() {
+  const socket = io();
   const dispatch = useDispatch();
 
-  const user = useSelector(store => store.user);
+  const user = useSelector((store) => store.user);
 
   useEffect(() => {
     dispatch({ type: 'FETCH_USER' });
   }, [dispatch]);
+
+  useEffect(() => {
+    socket.on('connect', () => {
+      console.log(socket.id);
+      dispatch({
+        type: 'SET_SOCKET_ID',
+        payload: socket.id,
+      });
+    });
+  }, []);
 
   return (
     <Router>
@@ -37,13 +50,13 @@ function App() {
         <Nav />
         <Switch>
           {/* Visiting localhost:3000 will redirect to localhost:3000/home */}
-          <Redirect exact from="/" to="/home" />
+          <Redirect exact from='/' to='/home' />
 
           {/* Visiting localhost:3000/about will show the about page. */}
           <Route
             // shows AboutPage at all times (logged in or not)
             exact
-            path="/about"
+            path='/about'
           >
             <AboutPage />
           </Route>
@@ -55,7 +68,7 @@ function App() {
           <ProtectedRoute
             // logged in shows UserPage else shows LoginPage
             exact
-            path="/user"
+            path='/user'
           >
             <UserPage />
           </ProtectedRoute>
@@ -63,51 +76,42 @@ function App() {
           <ProtectedRoute
             // logged in shows InfoPage else shows LoginPage
             exact
-            path="/info"
+            path='/info'
           >
             <InfoPage />
           </ProtectedRoute>
 
-          <Route
-            exact
-            path="/login"
-          >
-            {user.id ?
-              // If the user is already logged in, 
+          <Route exact path='/login'>
+            {user.id ? (
+              // If the user is already logged in,
               // redirect to the /user page
-              <Redirect to="/user" />
-              :
+              <Redirect to='/user' />
+            ) : (
               // Otherwise, show the login page
               <LoginPage />
-            }
+            )}
           </Route>
 
-          <Route
-            exact
-            path="/registration"
-          >
-            {user.id ?
-              // If the user is already logged in, 
+          <Route exact path='/registration'>
+            {user.id ? (
+              // If the user is already logged in,
               // redirect them to the /user page
-              <Redirect to="/user" />
-              :
+              <Redirect to='/user' />
+            ) : (
               // Otherwise, show the registration page
               <RegisterPage />
-            }
+            )}
           </Route>
 
-          <Route
-            exact
-            path="/home"
-          >
-            {user.id ?
-              // If the user is already logged in, 
+          <Route exact path='/home'>
+            {user.id ? (
+              // If the user is already logged in,
               // redirect them to the /user page
-              <Redirect to="/user" />
-              :
+              <Redirect to='/user' />
+            ) : (
               // Otherwise, show the Landing page
               <LandingPage />
-            }
+            )}
           </Route>
 
           {/* If none of the other routes matched, we will show a 404. */}
