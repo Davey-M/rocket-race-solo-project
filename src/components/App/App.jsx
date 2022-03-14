@@ -81,9 +81,17 @@ function App() {
           <ProtectedRoute
             // logged in shows InfoPage else shows LoginPage
             exact
-            path='/info'
+            path='/race'
           >
-            <InfoPage />
+            <h1>Race View</h1>
+          </ProtectedRoute>
+
+          <ProtectedRoute
+            // logged in shows InfoPage else shows LoginPage
+            exact
+            path='/Leaderboard'
+          >
+            <h1>Leaderboard View</h1>
           </ProtectedRoute>
 
           <Route exact path='/login'>

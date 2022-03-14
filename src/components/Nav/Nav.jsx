@@ -27,12 +27,14 @@ function Nav() {
         {/* If a user is logged in, show these links */}
         {user.id && (
           <>
-            <Link className='navLink' to='/user'>
-              <p>Profile</p>
+            <Link className='navLink' to='/leaderboard'>
+              <p>Leaderboard</p>
             </Link>
 
-            <Link className='navLink' to='/info'>
-              <p>Info Page</p>
+            <Link className='navLink' to='/race'>
+              <p>
+                <b>Race</b>
+              </p>
             </Link>
           </>
         )}
