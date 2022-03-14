@@ -22,6 +22,8 @@ import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
 import Home from '../Home/Home';
 
+import Modal from '../Modal/Modal';
+
 import './App.css';
 
 import { io } from 'socket.io-client';
@@ -52,6 +54,17 @@ function App() {
   return (
     <Router>
       <div>
+        <Modal
+          outerClick={() => {
+            console.log('Hello from outer');
+          }}
+          onClick={() => {
+            console.log('inner');
+          }}
+        >
+          <h1>Hello World</h1>
+        </Modal>
+
         <Nav />
         <Switch>
           {/* Visiting localhost:3000 will redirect to localhost:3000/home */}
