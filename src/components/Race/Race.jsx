@@ -5,9 +5,14 @@ import './Race.css';
 function Race() {
   // get the socket instance from the reducer
   const socket = useSelector((store) => store.socket);
+  const user = useSelector((store) => store.user);
 
   socket?.on('test', (stuff) => {
     console.log(stuff);
+  });
+
+  socket?.on('update-game-state', (game) => {
+    console.log(game);
   });
 
   return (
