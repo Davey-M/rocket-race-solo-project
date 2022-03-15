@@ -69,7 +69,7 @@ function Race() {
   };
 
   const handleGameEnd = () => {
-    socket.emit('finish-game');
+    socket.emit('finish-game', time);
   };
 
   return (

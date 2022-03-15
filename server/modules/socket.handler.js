@@ -116,9 +116,9 @@ function socketHandler(socket, io) {
     }, 100);
   })
 
-  socket.on('finish-game', () => {
+  socket.on('finish-game', (time) => {
     // set the finish time to the race clocks current time
-    let finishTime = raceClock / 10
+    let finishTime = time / 10
     console.log(socket.id, 'finished in', finishTime, 'seconds');
 
     // change the player within the game object to have the proper finish time and place
