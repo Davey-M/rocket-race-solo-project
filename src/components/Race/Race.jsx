@@ -59,7 +59,23 @@ function Race() {
 
   const handleStartGame = () => {
     socket.emit('start-game');
+    setTime('Ready!');
+    // setTimeout(() => {
+    //   setTime(10);
+    // }, 0);
   };
+
+  useEffect(() => {
+    let countdownTime = Math.floor((game?.startTime - Date.now()) / 1000);
+    if (!isNaN(countdownTime) && countdownTime >= 0) {
+      setTimeout(() => {
+        setTime(countdownTime);
+      }, 1000);
+    } else {
+      console.log('start time', game?.startTime);
+      console.log('now', Date.now());
+    }
+  }, [time, game]);
 
   return (
     <>
@@ -81,7 +97,11 @@ function Race() {
             {game?.started ? (
               <>
                 {/* this is rendered if you are in a game and the game is started */}
-                <div></div>
+                <div>
+                  <div className='overlay'>
+                    <h1>{time}</h1>
+                  </div>
+                </div>
               </>
             ) : (
               <>
