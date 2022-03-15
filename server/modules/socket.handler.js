@@ -15,12 +15,9 @@ function socketHandler(socket, io) {
   // console.log(socket.id);
   let current_game_id = '';
 
-  test.push(socket.id);
-
-
   socket.conn.on('close', () => {
     // console.log(socket.id, 'Disconnected');
-    test = test.filter(item => item !== socket.id);
+
   })
 
   socket.on('create-game', ({ user_id, socket_id, x, y }) => {
@@ -35,17 +32,28 @@ function socketHandler(socket, io) {
     }
 
     socket.join(current_game_id);
+
+    io.to(current_game_id).emit('update-game-state', {
+      game_id: current_game_id,
+      game: games[current_game_id]
+    });
   })
 
   socket.on('join-game', ({ game_id, user_id, socket_id, x, y }) => {
     if (games[game_id]) {
       current_game_id = game_id
 
-      players.push({ user_id, socket_id, x, y, time: null, place: null });
+      games[current_game_id].players = [
+        ...games[current_game_id].players,
+        { user_id, socket_id, x, y, time: null, place: null }
+      ];
 
       socket.join(current_game_id);
 
-      io.emit('update-game-state', games[current_game_id]);
+      io.to(current_game_id).emit('update-game-state', {
+        game_id: current_game_id,
+        game: games[current_game_id]
+      });
     } else {
       console.log('this game does not exist');
     }
@@ -55,8 +63,6 @@ function socketHandler(socket, io) {
 
   })
 }
-
-module.exports = socketHandler;
 
 const gameCodeSymbols = '1234567890abcdefghijklmnopqrstuvwxyz';
 
@@ -71,3 +77,5 @@ function generateGameCodes() {
 
   return gameCode;
 }
+
+module.exports = socketHandler;
