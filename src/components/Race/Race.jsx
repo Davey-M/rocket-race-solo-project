@@ -60,6 +60,7 @@ function Race() {
           <div>
             {gameStarted ? (
               <>
+                {/* this is rendered if you are in a game and the game is started */}
                 <div></div>
               </>
             ) : (
@@ -67,18 +68,25 @@ function Race() {
                 <div>
                   {game ? (
                     <>
+                      {/* this is only rendered if you are already in a game but it is not started */}
                       <h1>Game Id: {game.game_id}</h1>
                       <ul>
                         <p>
                           <b>Players:</b>
                         </p>
-                        {game.game.players.map((item, index) => {
+                        {game.players.map((item, index) => {
                           return <li key={index}>{item.socket_id}</li>;
                         })}
                       </ul>
+                      {/* this renders the start game button if you are the person who created the room
+                      the logic to validate this person is done within the socket on the server */}
+                      {game.players[0].socket_id === socket.id && (
+                        <button>Start Game</button>
+                      )}
                     </>
                   ) : (
                     <>
+                      {/* this is rendered if you are not in a game and it is not started */}
                       <div>
                         <button onClick={handleGameStart}>Start Game</button>
                       </div>

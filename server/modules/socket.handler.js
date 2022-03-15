@@ -17,10 +17,23 @@ function socketHandler(socket, io) {
 
   socket.conn.on('close', () => {
     // console.log(socket.id, 'Disconnected');
+    if (current_game_id !== '') {
+      games[current_game_id].players = games[current_game_id].players.filter(player => {
+        return player.socket_id !== socket.id
+      })
+    }
 
+    io.to(current_game_id).emit('update-game-state', {
+      game_id: current_game_id,
+      ...games[current_game_id]
+    });
   })
 
   socket.on('create-game', ({ user_id, socket_id, x, y }) => {
+    if (current_game_id !== '') {
+      socket.leave(current_game_id);
+    }
+
     current_game_id = generateGameCodes();
 
     games[current_game_id] = {
@@ -35,12 +48,16 @@ function socketHandler(socket, io) {
 
     io.to(current_game_id).emit('update-game-state', {
       game_id: current_game_id,
-      game: games[current_game_id]
+      ...games[current_game_id]
     });
   })
 
   socket.on('join-game', ({ game_id, user_id, socket_id, x, y }) => {
     if (games[game_id]) {
+      if (current_game_id !== '') {
+        socket.leave(current_game_id);
+      }
+
       current_game_id = game_id
 
       games[current_game_id].players = [
@@ -52,7 +69,7 @@ function socketHandler(socket, io) {
 
       io.to(current_game_id).emit('update-game-state', {
         game_id: current_game_id,
-        game: games[current_game_id]
+        ...games[current_game_id]
       });
     } else {
       console.log('this game does not exist');
