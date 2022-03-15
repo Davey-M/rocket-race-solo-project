@@ -23,6 +23,7 @@ import RegisterPage from '../RegisterPage/RegisterPage';
 import Home from '../Home/Home';
 
 import Modal from '../Modal/Modal';
+import Race from '../Race/Race';
 
 import './App.css';
 
@@ -54,7 +55,7 @@ function App() {
   return (
     <Router>
       <div>
-        <Modal
+        {/* <Modal
           outerClick={() => {
             console.log('Hello from outer');
           }}
@@ -63,7 +64,7 @@ function App() {
           }}
         >
           <h1>Hello World</h1>
-        </Modal>
+        </Modal> */}
 
         <Nav />
         <Switch>
@@ -96,7 +97,7 @@ function App() {
             exact
             path='/race'
           >
-            <h1>Race View</h1>
+            <Race />
           </ProtectedRoute>
 
           <ProtectedRoute
