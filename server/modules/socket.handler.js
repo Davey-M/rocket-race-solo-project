@@ -14,6 +14,7 @@ let games = {}
 function socketHandler(socket, io) {
   // console.log(socket.id);
   let current_game_id = '';
+  let raceClock = -10
 
   socket.conn.on('close', () => {
     // console.log(socket.id, 'Disconnected');
@@ -88,10 +89,36 @@ function socketHandler(socket, io) {
         ...games[current_game_id]
       });
     }
+
+    raceClock = -10;
+    let raceClockInterval = setInterval(() => {
+      raceClock = (Math.floor((Date.now() - games[current_game_id].startTime) / 100))
+      io.to(current_game_id).emit('update-race-clock', raceClock);
+      if (games[current_game_id].winner) {
+        clearInterval(raceClockInterval);
+      }
+    }, 100);
   })
 
-  socket.on('finish-game', ({ finish_time }) => {
+  socket.on('finish-game', () => {
+    let finishTime = raceClock / 10
+    console.log(socket.id, 'finished in', finishTime, 'seconds');
 
+    games[current_game_id].players.map(player => {
+      if (player.socket_id === socket.id) {
+        player.time = finishTime
+        player.place = games[current_game_id].players.filter(p => p.place).length + 1;
+      }
+    })
+
+    if (games[current_game_id].players.filter(p => p.place === null).length === 0) {
+      games[current_game_id].winner = games[current_game_id].players.filter(p => p.place === 1)[0].user_id;
+    }
+
+    io.to(current_game_id).emit('update-game-state', {
+      game_id: current_game_id,
+      ...games[current_game_id]
+    });
   })
 }
 

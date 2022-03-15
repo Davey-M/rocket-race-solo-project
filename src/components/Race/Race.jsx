@@ -10,8 +10,10 @@ function Race() {
 
   // const [game, setGame] = useState(null);
   const game = useSelector((store) => store.game);
-  const [time, setTime] = useState(0);
+  const [time, setTime] = useState(0.0);
   const [inputValue, setInputValue] = useState('');
+
+  let initialLoad = false;
 
   useEffect(() => {
     socket?.on('test', (stuff) => {
@@ -27,8 +29,8 @@ function Race() {
       });
     });
 
-    socket?.on('game-start', () => {
-      setGameStarted(true);
+    socket?.on('update-race-clock', (clock) => {
+      setTime(clock);
     });
 
     return () => {
@@ -61,18 +63,14 @@ function Race() {
     socket.emit('start-game');
   };
 
-  useEffect(() => {
-    let countdownTime = Math.floor((game?.startTime - Date.now()) / 1000);
-    if (!isNaN(countdownTime) && countdownTime >= 0) {
-      setTimeout(() => {
-        setTime(countdownTime);
-      }, 1000);
-    } else {
-      console.log('start time', game?.startTime);
-      console.log('now', Date.now());
-      console.log('difference', Date.now() - game?.startTime);
+  const handleGo = () => {
+    if (Date.now() > game?.startTime) {
     }
-  }, [game?.started, time]);
+  };
+
+  const handleGameEnd = () => {
+    socket.emit('finish-game');
+  };
 
   return (
     <>
@@ -86,7 +84,9 @@ function Race() {
           </div>
           <div className='pointer'></div>
           <div className='time-container'>
-            <h1>time</h1>
+            <h1>
+              {Math.floor(time / 10)}.{time % 10}
+            </h1>
           </div>
         </div>
         <div className='race-container'>
@@ -95,9 +95,9 @@ function Race() {
               <>
                 {/* this is rendered if you are in a game and the game is started */}
                 <div>
-                  <div className='overlay'>
-                    <h1>{time}</h1>
-                  </div>
+                  <button className='red' onClick={handleGameEnd}>
+                    End Game
+                  </button>
                 </div>
               </>
             ) : (
