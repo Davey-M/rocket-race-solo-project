@@ -10,7 +10,6 @@ function Race() {
 
   // const [game, setGame] = useState(null);
   const game = useSelector((store) => store.game);
-  const [gameStarted, setGameStarted] = useState(false);
   const [time, setTime] = useState(0);
   const [inputValue, setInputValue] = useState('');
 
@@ -39,7 +38,7 @@ function Race() {
     };
   }, []);
 
-  const handleGameStart = () => {
+  const handleCreateGame = () => {
     socket.emit('create-game', {
       user_id: user.id,
       socket_id: socket.id,
@@ -56,6 +55,10 @@ function Race() {
       x: 0,
       y: 0,
     });
+  };
+
+  const handleStartGame = () => {
+    socket.emit('start-game');
   };
 
   return (
@@ -75,7 +78,7 @@ function Race() {
         </div>
         <div className='race-container'>
           <div>
-            {gameStarted ? (
+            {game?.started ? (
               <>
                 {/* this is rendered if you are in a game and the game is started */}
                 <div></div>
@@ -98,14 +101,14 @@ function Race() {
                       {/* this renders the start game button if you are the person who created the room
                       the logic to validate this person is done within the socket on the server */}
                       {game.players[0].socket_id === socket.id && (
-                        <button>Start Game</button>
+                        <button onClick={handleStartGame}>Start Game</button>
                       )}
                     </>
                   ) : (
                     <>
                       {/* this is rendered if you are not in a game and it is not started */}
                       <div>
-                        <button onClick={handleGameStart}>Start Game</button>
+                        <button onClick={handleCreateGame}>Create Game</button>
                       </div>
                       <div>
                         <input

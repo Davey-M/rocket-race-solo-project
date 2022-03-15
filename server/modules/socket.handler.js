@@ -42,6 +42,7 @@ function socketHandler(socket, io) {
       ],
       winner: null,
       startTime: null,
+      started: false,
     }
 
     socket.join(current_game_id);
@@ -73,6 +74,19 @@ function socketHandler(socket, io) {
       });
     } else {
       console.log('this game does not exist');
+    }
+  })
+
+  socket.on('start-game', () => {
+    if (socket.id === games[current_game_id].players[0].socket_id) {
+      games[current_game_id].started = true;
+
+      games[current_game_id].startTime = Date.now() + 10_000;
+
+      io.to(current_game_id).emit('update-game-state', {
+        game_id: current_game_id,
+        ...games[current_game_id]
+      });
     }
   })
 
