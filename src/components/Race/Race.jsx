@@ -3,11 +3,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import './Race.css';
 
 function Race() {
+  const dispatch = useDispatch();
   // get the socket instance from the reducer
   const socket = useSelector((store) => store.socket);
   const user = useSelector((store) => store.user);
 
-  const [game, setGame] = useState(null);
+  // const [game, setGame] = useState(null);
+  const game = useSelector((store) => store.game);
   const [gameStarted, setGameStarted] = useState(false);
   const [time, setTime] = useState(0);
   const [inputValue, setInputValue] = useState('');
@@ -19,7 +21,11 @@ function Race() {
 
     socket?.on('update-game-state', (game) => {
       console.log(game);
-      setGame(game);
+      // setGame(game);
+      dispatch({
+        type: 'SET_GAME',
+        payload: game,
+      });
     });
 
     socket?.on('game-start', () => {
