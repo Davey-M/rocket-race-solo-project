@@ -59,10 +59,6 @@ function Race() {
 
   const handleStartGame = () => {
     socket.emit('start-game');
-    setTime('Ready!');
-    // setTimeout(() => {
-    //   setTime(10);
-    // }, 0);
   };
 
   useEffect(() => {
@@ -74,8 +70,9 @@ function Race() {
     } else {
       console.log('start time', game?.startTime);
       console.log('now', Date.now());
+      console.log('difference', Date.now() - game?.startTime);
     }
-  }, [time, game]);
+  }, [game?.started, time]);
 
   return (
     <>
