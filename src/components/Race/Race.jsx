@@ -6,6 +6,10 @@ function Race() {
   // get the socket instance from the reducer
   const socket = useSelector((store) => store.socket);
 
+  socket?.on('test', (stuff) => {
+    console.log(stuff);
+  });
+
   return (
     <>
       <div className='race-view-container'>
