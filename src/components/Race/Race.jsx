@@ -9,6 +9,7 @@ function Race() {
 
   const [game, setGame] = useState(null);
   const [gameStarted, setGameStarted] = useState(false);
+  const [time, setTime] = useState(0);
   const [inputValue, setInputValue] = useState('');
 
   useEffect(() => {
@@ -20,7 +21,17 @@ function Race() {
       console.log(game);
       setGame(game);
     });
-  });
+
+    socket?.on('game-start', () => {
+      setGameStarted(true);
+    });
+
+    return () => {
+      socket.removeAllListeners('test');
+      socket.removeAllListeners('update-game-state');
+      socket.removeAllListeners('game-start');
+    };
+  }, []);
 
   const handleGameStart = () => {
     socket.emit('create-game', {
