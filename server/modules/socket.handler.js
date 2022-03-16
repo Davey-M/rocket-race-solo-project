@@ -104,7 +104,7 @@ function socketHandler(socket, io) {
     let raceClockInterval = setInterval(() => {
 
       // set the race clock to the proper time
-      raceClock = (Math.floor((Date.now() - games[current_game_id].startTime) / 100))
+      raceClock = (Math.floor((Date.now() - games[current_game_id].startTime)) / 100)
 
       // send the race clock time to the clients
       io.to(current_game_id).emit('update-race-clock', raceClock);
@@ -113,7 +113,7 @@ function socketHandler(socket, io) {
       if (games[current_game_id].winner) {
         clearInterval(raceClockInterval);
       }
-    }, 100);
+    }, 10);
   })
 
   socket.on('finish-game', (time) => {

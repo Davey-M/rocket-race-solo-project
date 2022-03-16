@@ -13,13 +13,15 @@ function Race() {
   const [time, setTime] = useState(0.0);
   const [inputValue, setInputValue] = useState('');
 
-  let initialLoad = false;
+  let started = false;
 
+  // this useEffect sets up the io listeners subscriptions
   useEffect(() => {
     socket?.on('test', (stuff) => {
       console.log(stuff);
     });
 
+    // socket receives all the changes to the overall game state
     socket?.on('update-game-state', (game) => {
       console.log(game);
       // setGame(game);
@@ -29,16 +31,28 @@ function Race() {
       });
     });
 
+    // this socket sets the race clock
     socket?.on('update-race-clock', (clock) => {
       setTime(clock);
     });
 
+    // on component unmount we unsubscribe from all the io listeners
     return () => {
       socket.removeAllListeners('test');
       socket.removeAllListeners('update-game-state');
       socket.removeAllListeners('game-start');
     };
   }, []);
+
+  useEffect(() => {
+    // setup the keydown listener
+    window.addEventListener('keydown', handleGo);
+
+    return () => {
+      // unsubscribe from the keydown listener
+      window.removeEventListener('keydown', handleGo);
+    };
+  }, [game]);
 
   const handleCreateGame = () => {
     socket.emit('create-game', {
@@ -64,7 +78,10 @@ function Race() {
   };
 
   const handleGo = () => {
-    if (Date.now() > game?.startTime) {
+    if (started || Date.now() > game?.startTime) {
+      started = true;
+
+      console.log(game);
     }
   };
 
