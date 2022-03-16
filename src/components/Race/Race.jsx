@@ -3,6 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import './Race.css';
 
+import blueShip from './blue-ship.png';
+import redShip from './red-ship.png';
+
 function Race() {
   const dispatch = useDispatch();
   const history = useHistory();
@@ -184,15 +187,20 @@ function Race() {
                     return (
                       <div
                         key={index}
-                        className={
-                          'rocket' +
-                          (player.socket_id === socket.id ? ' me' : '')
-                        }
+                        className={'rocket'}
                         style={{
                           marginBottom: player.y,
                           left: index * 110,
                         }}
-                      ></div>
+                      >
+                        <img
+                          src={
+                            player.socket_id === socket.id ? blueShip : redShip
+                          }
+                          height={100}
+                          alt='Ship Image'
+                        />
+                      </div>
                     );
                   })}
                 </div>

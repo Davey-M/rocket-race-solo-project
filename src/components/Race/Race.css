@@ -112,10 +112,10 @@
   left: 0;
   bottom: 0;
 
-  width: 100px;
-  height: 100px;
+  /* width: 100px;
+  height: 100px; */
 
-  background-color: var(--red-1);
+  /* background-color: var(--red-1); */
 
   transition: margin 0.5s ease-out;
 }
