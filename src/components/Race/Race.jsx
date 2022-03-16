@@ -21,7 +21,6 @@ function Race() {
   // let nextClickTime = 0;
   const [nextClickTime, setNextClickTime] = useState(0);
   const [clickAvailable, setClickAvailable] = useState(false);
-  const [shine, toggleShine] = useState('shine');
 
   let started = false;
 
@@ -122,7 +121,6 @@ function Race() {
 
       socket.emit('update-player-position', y + 400 - jump);
 
-      toggleShine('shine');
       // setClickAvailable(false);
       // console.log(game);
     }
@@ -152,7 +150,7 @@ function Race() {
                 transform: `rotate(${spinAngle}deg)`,
               }}
             >
-              <div className={shine}></div>
+              <div></div>
             </div>
           </div>
           <div className='pointer'></div>

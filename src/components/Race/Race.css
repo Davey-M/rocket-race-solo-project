@@ -59,10 +59,6 @@
   background-color: var(--red-1);
 }
 
-.shine {
-  animation: click 0.5s ease-out;
-}
-
 .shade-container {
   position: absolute;
   top: 0;
@@ -71,11 +67,11 @@
   height: 50%;
   width: 100%;
 
-  background-color: var(--blue-1);
+  background-color: var(--blue-2);
 
-  z-index: 2;
+  z-index: 0;
 
-  opacity: 0.8;
+  /* opacity: 0.8; */
 }
 
 .pointer {
@@ -119,11 +115,11 @@
   width: 100px;
   height: 100px;
 
-  background-color: red;
+  background-color: var(--red-1);
 
   transition: margin 0.5s ease-out;
 }
 
 .rocket.me {
-  background-color: blue;
+  background-color: var(--blue-1);
 }
