@@ -4,7 +4,7 @@
       players: [
         {player_id, socket_id, x, y, time, place}
       ],
-      winner: player_id
+      winner: user_id
       startTime: timestamp
     }
   }

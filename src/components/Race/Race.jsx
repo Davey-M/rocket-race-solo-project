@@ -84,9 +84,7 @@ function Race() {
           </div>
           <div className='pointer'></div>
           <div className='time-container'>
-            <h1>
-              {Math.floor(time / 10)}.{time % 10}
-            </h1>
+            <h1>{time <= 0 ? Math.abs(Math.floor(time / 10)) : time / 10}</h1>
           </div>
         </div>
         <div className='race-container'>
