@@ -12,6 +12,7 @@ function Race() {
   const game = useSelector((store) => store.game);
   const [time, setTime] = useState(0.0);
   const [inputValue, setInputValue] = useState('');
+  const [y, setY] = useState(0);
 
   let started = false;
 
@@ -48,6 +49,9 @@ function Race() {
     // setup the keydown listener
     window.addEventListener('keydown', handleGo);
 
+    let newY = game?.players.filter((p) => p.socket_id === socket.id)[0].y;
+    setY(newY);
+
     return () => {
       // unsubscribe from the keydown listener
       window.removeEventListener('keydown', handleGo);
@@ -81,7 +85,9 @@ function Race() {
     if (started || Date.now() > game?.startTime) {
       started = true;
 
-      console.log(game);
+      socket.emit('update-player-position', y + 100);
+
+      // console.log(game);
     }
   };
 
@@ -109,9 +115,7 @@ function Race() {
             <div
               className='game-board'
               style={{
-                marginBottom: game?.players.filter(
-                  (p) => p.socket_id === socket.id,
-                )[0].y,
+                marginBottom: -1 * y + window.innerHeight / 4,
               }}
             >
               {/* this is rendered if you are in a game and the game is started */}

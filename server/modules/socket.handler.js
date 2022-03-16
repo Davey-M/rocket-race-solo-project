@@ -137,6 +137,16 @@ function socketHandler(socket, io) {
     // send the updated game state back to the clients
     sendUpdatedGameState(io, current_game_id);
   })
+
+  socket.on('update-player-position', (y) => {
+    games[current_game_id].players.map((p) => {
+      if (p.socket_id === socket.id) {
+        p.y = y;
+      }
+    })
+
+    sendUpdatedGameState(io, current_game_id);
+  })
 }
 
 // this function sends the game state to the clients
