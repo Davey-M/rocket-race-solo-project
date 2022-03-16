@@ -74,3 +74,21 @@
 
   margin-top: -10px;
 }
+
+.race-container {
+  position: relative;
+
+  width: 100%;
+}
+
+.game-board {
+  background-image: url(./colors.jpg);
+  position: absolute;
+  height: 2000px;
+  width: 100%;
+
+  bottom: 0;
+  left: 0;
+
+  z-index: -10;
+}

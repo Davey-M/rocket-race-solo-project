@@ -101,62 +101,56 @@ function Race() {
           </div>
           <div className='pointer'></div>
           <div className='time-container'>
-            <h1>{time <= 0 ? Math.abs(Math.floor(time / 10)) : time / 10}</h1>
+            <h1>{time <= 0 ? Math.abs(Math.floor(time / 10)) : time}</h1>
           </div>
         </div>
         <div className='race-container'>
-          <div>
-            {game?.started ? (
-              <>
-                {/* this is rendered if you are in a game and the game is started */}
-                <div>
-                  <button className='red' onClick={handleGameEnd}>
-                    End Game
-                  </button>
-                </div>
-              </>
-            ) : (
-              <>
-                <div>
-                  {game ? (
-                    <>
-                      {/* this is only rendered if you are already in a game but it is not started */}
-                      <h1>Game Id: {game.game_id}</h1>
-                      <ul>
-                        <p>
-                          <b>Players:</b>
-                        </p>
-                        {game.players.map((item, index) => {
-                          return <li key={index}>{item.socket_id}</li>;
-                        })}
-                      </ul>
-                      {/* this renders the start game button if you are the person who created the room
+          {game?.started ? (
+            <div className='game-board'>
+              {/* this is rendered if you are in a game and the game is started */}
+              <h1>test</h1>
+            </div>
+          ) : (
+            <>
+              <div>
+                {game ? (
+                  <>
+                    {/* this is only rendered if you are already in a game but it is not started */}
+                    <h1>Game Id: {game.game_id}</h1>
+                    <ul>
+                      <p>
+                        <b>Players:</b>
+                      </p>
+                      {game.players.map((item, index) => {
+                        return <li key={index}>{item.socket_id}</li>;
+                      })}
+                    </ul>
+                    {/* this renders the start game button if you are the person who created the room
                       the logic to validate this person is done within the socket on the server */}
-                      {game.players[0].socket_id === socket.id && (
-                        <button onClick={handleStartGame}>Start Game</button>
-                      )}
-                    </>
-                  ) : (
-                    <>
-                      {/* this is rendered if you are not in a game and it is not started */}
-                      <div>
-                        <button onClick={handleCreateGame}>Create Game</button>
-                      </div>
-                      <div>
-                        <input
-                          type='text'
-                          placeholder='Game Code'
-                          value={inputValue}
-                          onChange={(e) => setInputValue(e.target.value)}
-                        />
-                        <button onClick={handleJoinGame}>Join Game</button>
-                      </div>
-                    </>
-                  )}
-                </div>
-              </>
-            )}
-          </div>
+                    {game.players[0].socket_id === socket.id && (
+                      <button onClick={handleStartGame}>Start Game</button>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    {/* this is rendered if you are not in a game and it is not started */}
+                    <div>
+                      <button onClick={handleCreateGame}>Create Game</button>
+                    </div>
+                    <div>
+                      <input
+                        type='text'
+                        placeholder='Game Code'
+                        value={inputValue}
+                        onChange={(e) => setInputValue(e.target.value)}
+                      />
+                      <button onClick={handleJoinGame}>Join Game</button>
+                    </div>
+                  </>
+                )}
+              </div>
+            </>
+          )}
         </div>
       </div>
     </>
