@@ -32,7 +32,7 @@ function socketHandler(socket, io) {
     sendUpdatedGameState(io, current_game_id);
   })
 
-  socket.on('create-game', ({ user_id, socket_id, x, y }) => {
+  socket.on('create-game', ({ user_id, username, socket_id, x, y }) => {
     // leave if the player is already in a game.
     if (current_game_id !== '') {
       socket.leave(current_game_id);
@@ -44,7 +44,7 @@ function socketHandler(socket, io) {
     // setup the game state object
     games[current_game_id] = {
       players: [
-        { user_id, socket_id, x, y, time: null, place: null }
+        { user_id, username, socket_id, x, y, time: null, place: null }
       ],
       winner: null,
       startTime: null,
@@ -58,7 +58,7 @@ function socketHandler(socket, io) {
     sendUpdatedGameState(io, current_game_id);
   })
 
-  socket.on('join-game', ({ game_id, user_id, socket_id, x, y }) => {
+  socket.on('join-game', ({ game_id, user_id, username, socket_id, x, y }) => {
     // check if the game exists
     if (games[game_id]) {
 
@@ -73,7 +73,7 @@ function socketHandler(socket, io) {
       // add to the players list in the game state
       games[current_game_id].players = [
         ...games[current_game_id].players,
-        { user_id, socket_id, x, y, time: null, place: null }
+        { user_id, username, socket_id, x, y, time: null, place: null }
       ];
 
       // join the game room

@@ -84,6 +84,7 @@ function Race() {
   const handleCreateGame = () => {
     socket.emit('create-game', {
       user_id: user.id,
+      username: user.username,
       socket_id: socket.id,
       x: 0,
       y: 0,
@@ -94,6 +95,7 @@ function Race() {
     socket.emit('join-game', {
       game_id: inputValue,
       user_id: user.id,
+      username: user.username,
       socket_id: socket.id,
       x: 0,
       y: 0,
@@ -202,7 +204,7 @@ function Race() {
                         <b>Players:</b>
                       </p>
                       {game.players.map((item, index) => {
-                        return <li key={index}>{item.socket_id}</li>;
+                        return <li key={index}>{item.username}</li>;
                       })}
                     </ul>
                     {/* this renders the start game button if you are the person who created the room
