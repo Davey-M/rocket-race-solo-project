@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import './Race.css';
 
 function Race() {
   const dispatch = useDispatch();
+  const history = useHistory();
   // get the socket instance from the reducer
   const socket = useSelector((store) => store.socket);
   const user = useSelector((store) => store.user);
@@ -126,6 +128,14 @@ function Race() {
 
   const handleGameEnd = () => {
     socket.emit('finish-game', time);
+  };
+
+  const resetGame = () => {
+    dispatch({
+      type: 'SET_GAME',
+      payload: null,
+    });
+    history.push('/');
   };
 
   return (

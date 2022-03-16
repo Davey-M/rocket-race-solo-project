@@ -14,7 +14,7 @@ function Footer() {
 
   useEffect(() => {
     setRender(!(location.pathname === '/race'));
-    console.log(location.pathname);
+    // console.log(location.pathname);
   }, [location]);
 
   return <>{render && <FooterContent />}</>;
