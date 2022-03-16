@@ -1,5 +1,7 @@
 .home-page-container {
   margin-top: 20vh;
+
+  overflow: hidden;
 }
 
 @keyframes slide-right {
