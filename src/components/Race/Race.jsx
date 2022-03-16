@@ -14,6 +14,9 @@ function Race() {
   const [inputValue, setInputValue] = useState('');
   // const [y, setY] = useState(0);
   let y = 0;
+  // let nextClickTime = 0;
+  const [nextClickTime, setNextClickTime] = useState(0);
+  let clickAvailable = false;
 
   let started = false;
 
@@ -35,7 +38,11 @@ function Race() {
 
     // this socket sets the race clock
     socket?.on('update-race-clock', (clock) => {
-      setTime(clock);
+      setTime(clock.raceClock);
+      // nextClickTime.shift(clock.clickIntervalClock);
+      // console.log(clock.clickIntervalClock);
+      setNextClickTime(clock.clickIntervalClock);
+      clickAvailable = clock.available;
     });
 
     // on component unmount we unsubscribe from all the io listeners
@@ -58,7 +65,7 @@ function Race() {
       // unsubscribe from the keydown listener
       window.removeEventListener('keydown', handleGo);
     };
-  }, [game]);
+  }, [game, nextClickTime]);
 
   const handleCreateGame = () => {
     socket.emit('create-game', {
@@ -91,7 +98,13 @@ function Race() {
         handleGameEnd();
       }
 
-      socket.emit('update-player-position', y + 100);
+      // console.log({ nextClickTime: nextClickTime });
+
+      // let jump = 0;
+      let jump = Math.abs(Date.now() - nextClickTime);
+      clickAvailable = false;
+
+      socket.emit('update-player-position', y + 400 - jump);
 
       // console.log(game);
     }
