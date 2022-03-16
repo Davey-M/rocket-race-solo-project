@@ -106,9 +106,29 @@ function Race() {
         </div>
         <div className='race-container'>
           {game?.started ? (
-            <div className='game-board'>
+            <div
+              className='game-board'
+              style={{
+                marginBottom: game?.players.filter(
+                  (p) => p.socket_id === socket.id,
+                )[0].y,
+              }}
+            >
               {/* this is rendered if you are in a game and the game is started */}
-              <h1>test</h1>
+              {game?.players.map((player, index) => {
+                return (
+                  <div
+                    key={index}
+                    className={
+                      'rocket' + (player.socket_id === socket.id ? ' me' : '')
+                    }
+                    style={{
+                      marginBottom: player.y,
+                      left: index * 110,
+                    }}
+                  ></div>
+                );
+              })}
             </div>
           ) : (
             <>
