@@ -21,6 +21,7 @@ function Race() {
   // let nextClickTime = 0;
   const [nextClickTime, setNextClickTime] = useState(0);
   const [clickAvailable, setClickAvailable] = useState(false);
+  const [finished, setFinished] = useState(game?.winner ? true : false);
 
   let started = false;
 
@@ -70,6 +71,7 @@ function Race() {
     if (y >= 4000 && player?.place == null) {
       console.log('finishing');
       handleGameEnd();
+      setFinished(true);
     }
 
     // setup the keydown listener
@@ -140,99 +142,130 @@ function Race() {
 
   return (
     <>
-      <div className='race-view-container'>
-        <div className='info-container'>
-          <div className='spinner-container circle'>
-            <div className='shade-container'></div>
-            <div
-              className='spinner'
-              style={{
-                transform: `rotate(${spinAngle}deg)`,
-              }}
-            >
-              <div></div>
+      {!finished ? (
+        <>
+          <div className='race-view-container'>
+            <div className='info-container'>
+              <div className='spinner-container circle'>
+                <div className='shade-container'></div>
+                <div
+                  className='spinner'
+                  style={{
+                    transform: `rotate(${spinAngle}deg)`,
+                  }}
+                >
+                  <div></div>
+                </div>
+              </div>
+              <div className='pointer'></div>
+              <div className='time-container'>
+                <h1>
+                  {time <= 0
+                    ? Math.abs(Math.floor(time / 100))
+                    : (time / 100).toFixed(2)}
+                </h1>
+              </div>
+            </div>
+            <div className='race-container'>
+              {game?.started ? (
+                <div
+                  className='game-board'
+                  style={{
+                    marginBottom:
+                      -1 *
+                        game?.players.filter(
+                          (p) => p.socket_id === socket.id,
+                        )[0].y +
+                      window.innerHeight / 4,
+                  }}
+                >
+                  {/* this is rendered if you are in a game and the game is started */}
+                  {game?.players.map((player, index) => {
+                    return (
+                      <div
+                        key={index}
+                        className={
+                          'rocket' +
+                          (player.socket_id === socket.id ? ' me' : '')
+                        }
+                        style={{
+                          marginBottom: player.y,
+                          left: index * 110,
+                        }}
+                      ></div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <>
+                  <div>
+                    {game ? (
+                      <>
+                        {/* this is only rendered if you are already in a game but it is not started */}
+                        <h1>Game Id: {game.game_id}</h1>
+                        <ul>
+                          <p>
+                            <b>Players:</b>
+                          </p>
+                          {game.players.map((item, index) => {
+                            return <li key={index}>{item.username}</li>;
+                          })}
+                        </ul>
+                        {/* this renders the start game button if you are the person who created the room
+                      the logic to validate this person is done within the socket on the server */}
+                        {game.players[0].socket_id === socket.id && (
+                          <button onClick={handleStartGame}>Start Game</button>
+                        )}
+                      </>
+                    ) : (
+                      <>
+                        {/* this is rendered if you are not in a game and it is not started */}
+                        <div>
+                          <button onClick={handleCreateGame}>
+                            Create Game
+                          </button>
+                        </div>
+                        <div>
+                          <input
+                            type='text'
+                            placeholder='Game Code'
+                            value={inputValue}
+                            onChange={(e) => setInputValue(e.target.value)}
+                          />
+                          <button onClick={handleJoinGame}>Join Game</button>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </>
+              )}
             </div>
           </div>
-          <div className='pointer'></div>
-          <div className='time-container'>
-            <h1>
-              {time <= 0
-                ? Math.abs(Math.floor(time / 100))
-                : (time / 100).toFixed(2)}
-            </h1>
-          </div>
-        </div>
-        <div className='race-container'>
-          {game?.started ? (
-            <div
-              className='game-board'
-              style={{
-                marginBottom:
-                  -1 *
-                    game?.players.filter((p) => p.socket_id === socket.id)[0]
-                      .y +
-                  window.innerHeight / 4,
-              }}
-            >
-              {/* this is rendered if you are in a game and the game is started */}
-              {game?.players.map((player, index) => {
+        </>
+      ) : (
+        <>
+          <h1>Finished!</h1>
+          <ul>
+            {game.players
+              .sort((a, b) => {
+                if (!a?.place || !b?.place) {
+                  return Infinity;
+                }
+                return a?.place - b?.place;
+              })
+              .map((player, index) => {
                 return (
-                  <div
-                    key={index}
-                    className={
-                      'rocket' + (player.socket_id === socket.id ? ' me' : '')
-                    }
-                    style={{
-                      marginBottom: player.y,
-                      left: index * 110,
-                    }}
-                  ></div>
+                  <li key={index}>
+                    <b>{player.username}</b> {Math.floor(player?.time) / 10}{' '}
+                    seconds {' / '}
+                    {player?.place}
+                  </li>
                 );
               })}
-            </div>
-          ) : (
-            <>
-              <div>
-                {game ? (
-                  <>
-                    {/* this is only rendered if you are already in a game but it is not started */}
-                    <h1>Game Id: {game.game_id}</h1>
-                    <ul>
-                      <p>
-                        <b>Players:</b>
-                      </p>
-                      {game.players.map((item, index) => {
-                        return <li key={index}>{item.username}</li>;
-                      })}
-                    </ul>
-                    {/* this renders the start game button if you are the person who created the room
-                      the logic to validate this person is done within the socket on the server */}
-                    {game.players[0].socket_id === socket.id && (
-                      <button onClick={handleStartGame}>Start Game</button>
-                    )}
-                  </>
-                ) : (
-                  <>
-                    {/* this is rendered if you are not in a game and it is not started */}
-                    <div>
-                      <button onClick={handleCreateGame}>Create Game</button>
-                    </div>
-                    <div>
-                      <input
-                        type='text'
-                        placeholder='Game Code'
-                        value={inputValue}
-                        onChange={(e) => setInputValue(e.target.value)}
-                      />
-                      <button onClick={handleJoinGame}>Join Game</button>
-                    </div>
-                  </>
-                )}
-              </div>
-            </>
-          )}
-        </div>
-      </div>
+          </ul>
+          <button onClick={resetGame}>New Game</button>
+        </>
+      )}
     </>
   );
 }
