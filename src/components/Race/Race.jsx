@@ -12,7 +12,8 @@ function Race() {
   const game = useSelector((store) => store.game);
   const [time, setTime] = useState(0.0);
   const [inputValue, setInputValue] = useState('');
-  const [y, setY] = useState(0);
+  // const [y, setY] = useState(0);
+  let y = 0;
 
   let started = false;
 
@@ -46,12 +47,13 @@ function Race() {
   }, []);
 
   useEffect(() => {
+    let player = game?.players.filter((p) => p.socket_id === socket.id)[0];
+    let newY = player?.y;
+    // setY(newY);
+    y = newY;
+
     // setup the keydown listener
-    window.addEventListener('keydown', handleGo);
-
-    let newY = game?.players.filter((p) => p.socket_id === socket.id)[0].y;
-    setY(newY);
-
+    if (!player?.place) window.addEventListener('keydown', handleGo);
     return () => {
       // unsubscribe from the keydown listener
       window.removeEventListener('keydown', handleGo);
@@ -83,7 +85,11 @@ function Race() {
 
   const handleGo = () => {
     if (started || Date.now() > game?.startTime) {
-      started = true;
+      if (!started) started = true;
+
+      if (y >= 4000) {
+        handleGameEnd();
+      }
 
       socket.emit('update-player-position', y + 100);
 
@@ -107,7 +113,11 @@ function Race() {
           </div>
           <div className='pointer'></div>
           <div className='time-container'>
-            <h1>{time <= 0 ? Math.abs(Math.floor(time / 10)) : time}</h1>
+            <h1>
+              {time <= 0
+                ? Math.abs(Math.floor(time / 100))
+                : (time / 100).toFixed(2)}
+            </h1>
           </div>
         </div>
         <div className='race-container'>
@@ -115,7 +125,11 @@ function Race() {
             <div
               className='game-board'
               style={{
-                marginBottom: -1 * y + window.innerHeight / 4,
+                marginBottom:
+                  -1 *
+                    game?.players.filter((p) => p.socket_id === socket.id)[0]
+                      .y +
+                  window.innerHeight / 4,
               }}
             >
               {/* this is rendered if you are in a game and the game is started */}

@@ -86,7 +86,7 @@
 .game-board {
   background-image: url(./colors.jpg);
   position: absolute;
-  height: 2000px;
+  height: 4000px;
   width: 100%;
 
   bottom: 0;
