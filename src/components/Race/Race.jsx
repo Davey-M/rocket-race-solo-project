@@ -33,7 +33,7 @@ function Race() {
 
     // socket receives all the changes to the overall game state
     socket?.on('update-game-state', (game) => {
-      console.log(game);
+      // console.log(game);
       // setGame(game);
       dispatch({
         type: 'SET_GAME',
@@ -69,7 +69,7 @@ function Race() {
     y = newY;
 
     if (y >= 4000 && player?.place == null) {
-      console.log('finishing');
+      // console.log('finishing');
       handleGameEnd();
       setFinished(true);
     }
