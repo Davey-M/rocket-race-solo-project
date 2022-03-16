@@ -8,6 +8,8 @@ function Race() {
   const socket = useSelector((store) => store.socket);
   const user = useSelector((store) => store.user);
 
+  const [spinAngle, setSpinAngle] = useState(90);
+
   // const [game, setGame] = useState(null);
   const game = useSelector((store) => store.game);
   const [time, setTime] = useState(0.0);
@@ -16,7 +18,8 @@ function Race() {
   let y = 0;
   // let nextClickTime = 0;
   const [nextClickTime, setNextClickTime] = useState(0);
-  let clickAvailable = false;
+  const [clickAvailable, setClickAvailable] = useState(false);
+  const [shine, toggleShine] = useState('shine');
 
   let started = false;
 
@@ -42,7 +45,11 @@ function Race() {
       // nextClickTime.shift(clock.clickIntervalClock);
       // console.log(clock.clickIntervalClock);
       setNextClickTime(clock.clickIntervalClock);
-      clickAvailable = clock.available;
+      // clickAvailable = clock.available;
+      if (clickAvailable === false) {
+        setClickAvailable(clock.available);
+      }
+      setSpinAngle(((Date.now() - clock.clickIntervalClock) / 360) * 125 - 90);
     });
 
     // on component unmount we unsubscribe from all the io listeners
@@ -58,6 +65,11 @@ function Race() {
     let newY = player?.y;
     // setY(newY);
     y = newY;
+
+    if (y >= 4000 && player?.place == null) {
+      console.log('finishing');
+      handleGameEnd();
+    }
 
     // setup the keydown listener
     if (!player?.place) window.addEventListener('keydown', handleGo);
@@ -91,21 +103,23 @@ function Race() {
   };
 
   const handleGo = () => {
+    // console.log(clickAvailable);
     if (started || Date.now() > game?.startTime) {
       if (!started) started = true;
 
-      if (y >= 4000) {
-        handleGameEnd();
-      }
+      // if (y >= 4000) {
+      //   handleGameEnd();
+      // }
 
       // console.log({ nextClickTime: nextClickTime });
 
       // let jump = 0;
       let jump = Math.abs(Date.now() - nextClickTime);
-      clickAvailable = false;
 
       socket.emit('update-player-position', y + 400 - jump);
 
+      toggleShine('shine');
+      // setClickAvailable(false);
       // console.log(game);
     }
   };
@@ -120,8 +134,13 @@ function Race() {
         <div className='info-container'>
           <div className='spinner-container circle'>
             <div className='shade-container'></div>
-            <div className='spinner'>
-              <div></div>
+            <div
+              className='spinner'
+              style={{
+                transform: `rotate(${spinAngle}deg)`,
+              }}
+            >
+              <div className={shine}></div>
             </div>
           </div>
           <div className='pointer'></div>

@@ -108,12 +108,14 @@ function socketHandler(socket, io) {
       // set the race clock to the proper time
       raceClock = (Math.floor((Date.now() - games[current_game_id].startTime) / 10))
 
+      let available = false
       if (Date.now() > clickIntervalClock + 500) {
         clickIntervalClock = Date.now() + 500
+        available = true
       }
 
       // send the race clock time to the clients
-      io.to(current_game_id).emit('update-race-clock', { raceClock, clickIntervalClock, available: true });
+      io.to(current_game_id).emit('update-race-clock', { raceClock, clickIntervalClock, available });
 
       // if the game has a winner clear the race clock interval
       if (games[current_game_id].winner) {
