@@ -16,7 +16,7 @@ const io = new Server(httpServer);
 const socketHandler = require('./modules/socket.handler');
 
 io.on('connection', (socket) => {
-  socketHandler(socket);
+  socketHandler(socket, io);
 })
 
 const sessionMiddleware = require('./modules/session-middleware');

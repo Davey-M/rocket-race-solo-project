@@ -22,14 +22,15 @@ import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
 import Home from '../Home/Home';
 
+import Modal from '../Modal/Modal';
+import Race from '../Race/Race';
+
 import './App.css';
 
 import { io } from 'socket.io-client';
 
 function App() {
   // instantiate the socket instance
-  const socket = io();
-
   const dispatch = useDispatch();
 
   const user = useSelector((store) => store.user);
@@ -39,12 +40,12 @@ function App() {
   }, [dispatch]);
 
   useEffect(() => {
-    // set the socket id in a reducer on connect
+    const socket = io();
+
     socket.on('connect', () => {
-      // console.log(socket.id); // test
       dispatch({
-        type: 'SET_SOCKET_ID',
-        payload: socket.id,
+        type: 'SET_SOCKET',
+        payload: socket,
       });
     });
   }, []);
@@ -52,6 +53,17 @@ function App() {
   return (
     <Router>
       <div>
+        {/* <Modal
+          outerClick={() => {
+            console.log('Hello from outer');
+          }}
+          onClick={() => {
+            console.log('inner');
+          }}
+        >
+          <h1>Hello World</h1>
+        </Modal> */}
+
         <Nav />
         <Switch>
           {/* Visiting localhost:3000 will redirect to localhost:3000/home */}
@@ -83,7 +95,7 @@ function App() {
             exact
             path='/race'
           >
-            <h1>Race View</h1>
+            <Race />
           </ProtectedRoute>
 
           <ProtectedRoute
