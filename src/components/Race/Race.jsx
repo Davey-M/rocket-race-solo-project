@@ -162,11 +162,13 @@ function Race() {
               </div>
               <div className='pointer'></div>
               <div className='time-container'>
+                <div className='red-back line'></div>
                 <h1>
                   {time <= 0
                     ? Math.abs(Math.floor(time / 100))
                     : (time / 100).toFixed(2)}
                 </h1>
+                <div className='blue-back line'></div>
               </div>
             </div>
             <div className='race-container'>

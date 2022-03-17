@@ -56,7 +56,7 @@
   width: 55%;
   height: 100%;
 
-  background-color: var(--red-1);
+  background-color: var(--blue-1);
 }
 
 .shade-container {
@@ -67,7 +67,7 @@
   height: 50%;
   width: 100%;
 
-  background-color: var(--blue-2);
+  background-color: var(--red-3);
 
   z-index: 0;
 
@@ -78,7 +78,7 @@
   height: 20px;
   width: 5px;
 
-  background-color: var(--red-1);
+  background-color: var(--blue-1);
 
   z-index: 2;
 
