@@ -6,10 +6,12 @@ import './ProfilePage.css';
 
 function ProfilePage() {
   const dispatch = useDispatch();
-  const id = useParams().id;
+  const user = useSelector((store) => store.user);
+  const id = useParams().id ? useParams().id : user.id;
   const profile = useSelector((store) => store.profile);
 
   useEffect(() => {
+    console.log(id);
     dispatch({
       type: 'GET_PROFILE',
       payload: id,
@@ -30,13 +32,15 @@ function ProfilePage() {
         <div className='races-container'>
           <h2 className='dark-back'>Recent Races</h2>
           <div>
-            {profile?.finish_time?.map((race, index) => {
+            {profile?.finish_time?.map((time, index) => {
+              if (time == null) {
+                return;
+              }
               return (
-                <div key={index}>
-                  <p>
-                    {race} {profile.place[index]}
-                  </p>
-                </div>
+                <p key={index} className='card shadow'>
+                  <span className='time'>{time}</span>
+                  <span className='place'>{profile.place[index]}</span>
+                </p>
               );
             })}
           </div>

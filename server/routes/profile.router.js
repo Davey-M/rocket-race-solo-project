@@ -10,7 +10,7 @@ router.get('/:id', async (req, res) => {
 
       const sqlText = `
         SELECT "user"."id", "username", "about", "img", array_agg("users_races"."finish_time") AS "finish_time", array_agg("users_races"."place") AS "place" FROM "user"
-        JOIN "users_races"
+        FULL JOIN "users_races"
           ON "user"."id" = "users_races"."user_id"
         WHERE "user"."id" = $1
         GROUP BY "user"."id";
