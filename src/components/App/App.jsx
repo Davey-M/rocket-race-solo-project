@@ -21,6 +21,7 @@ import LandingPage from '../LandingPage/LandingPage';
 import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
 import Home from '../Home/Home';
+import ProfilePage from '../ProfilePage/ProfilePage';
 
 import Modal from '../Modal/Modal';
 import Race from '../Race/Race';
@@ -85,9 +86,17 @@ function App() {
           <ProtectedRoute
             // logged in shows UserPage else shows LoginPage
             exact
+            path='/user/:id'
+          >
+            <ProfilePage />
+          </ProtectedRoute>
+
+          <ProtectedRoute
+            // logged in shows UserPage else shows LoginPage
+            exact
             path='/user'
           >
-            <UserPage />
+            <ProfilePage />
           </ProtectedRoute>
 
           <ProtectedRoute
