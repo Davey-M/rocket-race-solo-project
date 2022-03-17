@@ -3,10 +3,10 @@ const router = express.Router();
 
 const pool = require('../modules/pool');
 
-router.get('/', async (req, res) => {
+router.get('/:id', async (req, res) => {
   if (req.isAuthenticated()) {
     try {
-      const id = req.body.id;
+      const id = req.params.id;
 
       const sqlText = `
         SELECT "id", "username", "about", "img" FROM "user" WHERE "id" = $1;
