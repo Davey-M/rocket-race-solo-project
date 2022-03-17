@@ -4,10 +4,14 @@ import axios from 'axios';
 function* getProfile(action) {
   console.log('in get profile');
   let response = yield axios.get(`/api/profile/${action.payload}`);
-  yield put({
-    type: 'SET_PROFILE',
-    payload: response.data[0],
-  });
+  console.log(response);
+
+  if (response.data.length > 0) {
+    yield put({
+      type: 'SET_PROFILE',
+      payload: response.data[0],
+    });
+  }
 }
 
 function* profileSaga() {

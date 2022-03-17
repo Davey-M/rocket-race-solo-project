@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 
@@ -6,6 +6,7 @@ import './ProfilePage.css';
 
 function ProfilePage() {
   const dispatch = useDispatch();
+  const location = useLocation();
   const user = useSelector((store) => store.user);
   const id = useParams().id ? useParams().id : user.id;
   const profile = useSelector((store) => store.profile);
@@ -22,7 +23,7 @@ function ProfilePage() {
         type: 'CLEAR_PROFILE',
       });
     };
-  }, []);
+  }, [location]);
 
   return (
     <>
