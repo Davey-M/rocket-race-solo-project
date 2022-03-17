@@ -9,6 +9,8 @@
     }
   }
 */
+const pool = require('../modules/pool');
+
 let games = {}
 
 function socketHandler(socket, io) {
@@ -140,6 +142,8 @@ function socketHandler(socket, io) {
     // check to see if the game has a winner
     if (games[current_game_id].players.filter(p => p.place === null).length === 0) {
       games[current_game_id].winner = games[current_game_id].players.filter(p => p.place === 1)[0]?.user_id;
+      // console.log('winner!', games[current_game_id].winner);
+      postGame(current_game_id);
     }
 
     // send the updated game state back to the clients
@@ -179,6 +183,51 @@ function generateGameCodes() {
   } while (gameCode in games);
 
   return gameCode;
+}
+
+async function postGame(gameCode) {
+  try {
+    let game = games[gameCode];
+
+    // console.log(game);
+
+    const sqlTextOne = `
+      INSERT INTO "race" ("time", "winner_id")
+      VALUES (to_timestamp($1 / 1000.0), $2)
+      RETURNING "id";
+    `
+    const sqlOptionsOne = [game.startTime, game.winner]
+
+    const response = await pool.query(sqlTextOne, sqlOptionsOne);
+    const game_id = response.rows[0].id;
+
+    // loop through the players and insert data into the users_races joining table
+    for (let player of game.players) {
+      // console.log(player);
+      try {
+        const sqlText = `
+          INSERT INTO "users_races" ("user_id", "race_id", "finish_time", "place")
+          VALUES ($1, $2, $3, $4);
+        `
+        const sqlOptions = [
+          player.user_id,
+          game_id,
+          Math.floor(player.time) / 10, // this gives us the player time in seconds instead of 10 milliseconds
+          player.place,
+        ]
+
+        let response = await pool.query(sqlText, sqlOptions);
+
+        // console.log(response);
+      } catch (err) {
+        console.log('Error posting')
+      }
+    }
+
+    // console.log(response);
+  } catch (err) {
+    console.log('Error posing to db', err);
+  }
 }
 
 module.exports = socketHandler;
