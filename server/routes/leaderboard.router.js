@@ -31,7 +31,7 @@ router.get('/', async (req, res) => {
   try {
 
     const sqlText = `
-      SELECT "race"."time", "user"."username" as "winner", "users_races"."finish_time" FROM "race"
+      SELECT date("race"."time") as "time", "user"."username" as "winner", "users_races"."finish_time" FROM "race"
       FULL JOIN "users_races"
         ON "race"."winner_id" = "users_races"."user_id" AND "race"."id" = "users_races"."race_id"
       JOIN "user"
