@@ -189,7 +189,7 @@ async function postGame(gameCode) {
   try {
     let game = games[gameCode];
 
-    console.log(game);
+    // console.log(game);
 
     const sqlTextOne = `
       INSERT INTO "race" ("time", "winner_id")
@@ -203,7 +203,7 @@ async function postGame(gameCode) {
 
     // loop through the players and insert data into the users_races joining table
     for (let player of game.players) {
-      console.log(player);
+      // console.log(player);
       try {
         const sqlText = `
           INSERT INTO "users_races" ("user_id", "race_id", "finish_time", "place")
@@ -212,13 +212,13 @@ async function postGame(gameCode) {
         const sqlOptions = [
           player.user_id,
           game_id,
-          Math.floor(player.time / 10), // this gives us the player time in seconds instead of 10 milliseconds
+          Math.floor(player.time) / 10, // this gives us the player time in seconds instead of 10 milliseconds
           player.place,
         ]
 
         let response = await pool.query(sqlText, sqlOptions);
 
-        console.log(response);
+        // console.log(response);
       } catch (err) {
         console.log('Error posting')
       }
