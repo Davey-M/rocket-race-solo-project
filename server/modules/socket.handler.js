@@ -186,20 +186,48 @@ function generateGameCodes() {
 }
 
 async function postGame(gameCode) {
-  let game = games[gameCode];
+  try {
+    let game = games[gameCode];
 
-  console.log(game);
+    console.log(game);
 
-  const sqlTextOne = `
-    INSERT INTO "race" ("time", "winner_id")
-    VALUES (to_timestamp($1 / 1000.0), $2)
-    RETURNING "id";
-  `
-  const sqlOptionsOne = [game.startTime, game.winner]
+    const sqlTextOne = `
+      INSERT INTO "race" ("time", "winner_id")
+      VALUES (to_timestamp($1 / 1000.0), $2)
+      RETURNING "id";
+    `
+    const sqlOptionsOne = [game.startTime, game.winner]
 
-  const response = await pool.query(sqlTextOne, sqlOptionsOne);
+    const response = await pool.query(sqlTextOne, sqlOptionsOne);
+    const game_id = response.rows[0].id;
 
-  console.log(response);
+    // loop through the players and insert data into the users_races joining table
+    for (let player of game.players) {
+      console.log(player);
+      try {
+        const sqlText = `
+          INSERT INTO "users_races" ("user_id", "race_id", "finish_time", "place")
+          VALUES ($1, $2, $3, $4);
+        `
+        const sqlOptions = [
+          player.user_id,
+          game_id,
+          Math.floor(player.time / 10), // this gives us the player time in seconds instead of 10 milliseconds
+          player.place,
+        ]
+
+        let response = await pool.query(sqlText, sqlOptions);
+
+        console.log(response);
+      } catch (err) {
+        console.log('Error posting')
+      }
+    }
+
+    // console.log(response);
+  } catch (err) {
+    console.log('Error posing to db', err);
+  }
 }
 
 module.exports = socketHandler;
