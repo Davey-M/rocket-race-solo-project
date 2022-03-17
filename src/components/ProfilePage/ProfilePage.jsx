@@ -16,6 +16,12 @@ function ProfilePage() {
       type: 'GET_PROFILE',
       payload: id,
     });
+
+    return () => {
+      dispatch({
+        type: 'CLEAR_PROFILE',
+      });
+    };
   }, []);
 
   return (
