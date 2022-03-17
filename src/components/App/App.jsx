@@ -22,6 +22,7 @@ import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
 import Home from '../Home/Home';
 import ProfilePage from '../ProfilePage/ProfilePage';
+import LeaderBoardView from '../LeaderBoardView/LeaderBoardView';
 
 import Modal from '../Modal/Modal';
 import Race from '../Race/Race';
@@ -112,7 +113,7 @@ function App() {
             exact
             path='/Leaderboard'
           >
-            <h1>Leaderboard View</h1>
+            <LeaderBoardView />
           </ProtectedRoute>
 
           <Route exact path='/login'>
