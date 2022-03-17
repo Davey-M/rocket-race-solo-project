@@ -5,6 +5,7 @@ import socketId from './socketId.reducer';
 import socket from './socket.reducer';
 import game from './game.reducer';
 import profile from './profile.reducer';
+import leaderboard from './leaderboard.reducer';
 
 // rootReducer is the primary reducer for our entire project
 // It bundles up all of the other reducers so our project can use them.
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   socket,
   game,
   profile,
+  leaderboard,
 });
 
 export default rootReducer;
