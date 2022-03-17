@@ -124,7 +124,7 @@ function Race() {
       // let jump = 0;
       let jump = Math.abs(Date.now() - nextClickTime);
 
-      socket.emit('update-player-position', y + 400 - jump);
+      socket.emit('update-player-position', y + 400 - jump * 1.5);
 
       // setClickAvailable(false);
       // console.log(game);
