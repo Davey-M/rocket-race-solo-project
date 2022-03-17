@@ -1,16 +1,17 @@
-import { takeLatest, all, put } from 'redux-saga/effects';
+import { takeLatest, put } from 'redux-saga/effects';
 import axios from 'axios';
 
 function* getProfile(action) {
-  let response = yield axios.get(`/api/profile/${action.payload}`)
+  console.log('in get profile');
+  let response = yield axios.get(`/api/profile/${action.payload}`);
   yield put({
     type: 'SET_PROFILE',
-    payload: response.data,
-  })
+    payload: response.data[0],
+  });
 }
 
 function* profileSaga() {
-  yield takeLatest('getProfile', getProfile);
+  yield takeLatest('GET_PROFILE', getProfile);
 }
 
 export default profileSaga;

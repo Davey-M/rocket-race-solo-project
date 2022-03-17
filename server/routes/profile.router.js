@@ -9,7 +9,11 @@ router.get('/:id', async (req, res) => {
       const id = req.params.id;
 
       const sqlText = `
-        SELECT "id", "username", "about", "img" FROM "user" WHERE "id" = $1;
+        SELECT "user"."id", "username", "about", "img", array_agg("users_races"."finish_time") AS "finish_time", array_agg("users_races"."place") AS "place" FROM "user"
+        JOIN "users_races"
+          ON "user"."id" = "users_races"."user_id"
+        WHERE "user"."id" = $1
+        GROUP BY "user"."id";
       `
 
       const sqlOptions = [id];
@@ -18,6 +22,7 @@ router.get('/:id', async (req, res) => {
 
       res.send(response.rows);
     } catch (err) {
+      console.log(err);
       res.sendStatus(500);
     }
   }
