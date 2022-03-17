@@ -12,7 +12,7 @@ function LeaderBoardView() {
     });
   }, []);
 
-  console.log(leaderboard);
+  // console.log(leaderboard);
   return (
     <>
       <div>
