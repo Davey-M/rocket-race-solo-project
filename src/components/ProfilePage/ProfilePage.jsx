@@ -29,7 +29,17 @@ function ProfilePage() {
         </div>
         <div className='races-container'>
           <h2 className='dark-back'>Recent Races</h2>
-          <div>{}</div>
+          <div>
+            {profile?.finish_time?.map((race, index) => {
+              return (
+                <div key={index}>
+                  <p>
+                    {race} {profile.place[index]}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </>
