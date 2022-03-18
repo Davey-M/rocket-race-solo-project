@@ -13,7 +13,7 @@ function* getRace(action) {
   let response = yield axios.get(`/api/leaderboard/${action.payload}`);
   yield put({
     type: 'SET_RACE',
-    payload: response.data,
+    payload: response.data[0],
   })
 }
 
