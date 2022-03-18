@@ -1,4 +1,4 @@
-import { put, takeLatest } from "redux-saga/effects";
+import { put, take, takeLatest } from "redux-saga/effects";
 import axios from "axios";
 
 function* getLeaderboard() {
@@ -9,8 +9,17 @@ function* getLeaderboard() {
   })
 }
 
+function* getRace(action) {
+  let response = yield axios.get(`/api/leaderboard/${action.payload}`);
+  yield put({
+    type: 'SET_RACE',
+    payload: response.data,
+  })
+}
+
 function* leaderboardSaga() {
   yield takeLatest('GET_LEADERBOARD', getLeaderboard);
+  yield takeLatest('GET_RACE', getRace);
 }
 
 export default leaderboardSaga;
