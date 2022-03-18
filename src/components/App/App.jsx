@@ -23,6 +23,7 @@ import RegisterPage from '../RegisterPage/RegisterPage';
 import Home from '../Home/Home';
 import ProfilePage from '../ProfilePage/ProfilePage';
 import LeaderBoardView from '../LeaderBoardView/LeaderBoardView';
+import RaceDetails from '../RaceDetails/RaceDetails';
 
 import Modal from '../Modal/Modal';
 import Race from '../Race/Race';
@@ -98,6 +99,10 @@ function App() {
             path='/user'
           >
             <ProfilePage />
+          </ProtectedRoute>
+
+          <ProtectedRoute exact path='/race/:id'>
+            <RaceDetails />
           </ProtectedRoute>
 
           <ProtectedRoute

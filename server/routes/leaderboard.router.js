@@ -7,13 +7,27 @@ router.get('/:id', async (req, res) => {
     const id = req.params.id;
 
     const sqlText = `
-      SELECT "race".*, "user"."username" as "winner", json_agg("users_races") AS "players" FROM "race"
-      FULL JOIN "users_races"
-        ON "race"."id" = "users_races"."race_id"
-      JOIN "user"
-        ON "race"."winner_id" = "user"."id"
+      SELECT
+        "race".*,
+        (
+          SELECT "username" AS "winner" FROM "user"
+          JOIN "race"
+            ON "race"."winner_id" = "user"."id"
+          WHERE "race"."id" = $1
+        ),
+        json_agg(
+          json_build_object(
+            'user_id', "users_races"."user_id",
+            'username', "user"."username",
+            'place', "users_races"."place",
+            'finish_time', "users_races"."finish_time"
+          )
+        ) AS "players"
+      FROM "race"
+      JOIN "users_races" ON "users_races"."race_id" = "race"."id"
+      JOIN "user" ON "users_races"."user_id" = "user"."id"
       WHERE "race"."id" = $1
-      GROUP BY "race"."id", "user"."username";
+      GROUP BY "race"."id";
     `
     const sqlOptions = [id];
 

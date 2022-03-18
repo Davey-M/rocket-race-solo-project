@@ -2,6 +2,11 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
+import './LeaderBoardView.css';
+
+// component imports
+import RaceCard from '../RaceCard/RaceCard';
+
 function LeaderBoardView() {
   const dispatch = useDispatch();
   const history = useHistory();
@@ -25,21 +30,19 @@ function LeaderBoardView() {
   // console.log(leaderboard);
   return (
     <>
-      <div>
+      <div className='leaderboard-container'>
+        <h2 className='dark-back leaderboard-header'>Leaderboard</h2>
         {leaderboard.map((race, index) => {
-          console.log(race);
+          // console.log(race);
           return (
-            <p
+            <RaceCard
               key={index}
-              className='card'
-              onClick={() => handleCardClick(race.race_id)}
-            >
-              <span>{race.time.split('T')[0]}</span>
-              <span onClick={() => handleWinnerClick(race.user_id)}>
-                {race.winner}
-              </span>
-              <span>{race.finish_time}</span>
-            </p>
+              one={race.time.split('T')[0]}
+              two={race.winner}
+              three={race.finish_time}
+              player_id={race.user_id}
+              click={() => handleCardClick(race.race_id)}
+            />
           );
         })}
       </div>
