@@ -44,7 +44,7 @@ function ProfilePage() {
                 return;
               }
               return (
-                <p key={index} className='card shadow'>
+                <p key={index} className='card'>
                   <span className='time'>{time}</span>
                   <span className='place'>{profile.place[index]}</span>
                 </p>
