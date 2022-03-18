@@ -17,6 +17,10 @@
   height: 200px;
 }
 
+.profile-image img {
+  width: 100%;
+}
+
 .profile-info-container {
   max-width: 300px;
 }

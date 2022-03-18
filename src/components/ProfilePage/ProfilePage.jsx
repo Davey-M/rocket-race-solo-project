@@ -33,7 +33,9 @@ function ProfilePage() {
     <>
       <div className='profile-container'>
         <div className='image-container'>
-          <div className='circle blue-back profile-image'></div>
+          <div className='circle blue-back profile-image'>
+            {profile.img && <img src={profile.img} alt='Profile Image' />}
+          </div>
         </div>
         <div className='profile-info-container'>
           <h1>{profile?.username}</h1>

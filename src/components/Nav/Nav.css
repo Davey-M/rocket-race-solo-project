@@ -64,6 +64,10 @@
   /* margin: 5px 0px 5px auto; */
 }
 
+.toggleImage img {
+  width: 100%;
+}
+
 .dropdownToggle {
   position: relative;
 
