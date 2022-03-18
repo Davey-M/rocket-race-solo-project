@@ -34,7 +34,6 @@ function LeaderBoardView() {
         <h2 className='dark-back leaderboard-header'>Leaderboard</h2>
         {leaderboard.map((race, index) => {
           // console.log(race);
-          console.log(race);
           return (
             <RaceCard
               key={index}
