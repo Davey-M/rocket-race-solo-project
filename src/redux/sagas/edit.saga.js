@@ -17,3 +17,5 @@ function* editSaga() {
   yield takeLatest('SAVE_EDIT', saveEdit);
   yield takeLatest('GET_EDIT', getEdit);
 }
+
+export default editSaga;

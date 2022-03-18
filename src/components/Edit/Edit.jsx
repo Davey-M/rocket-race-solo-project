@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import './Edit.css';
 
@@ -31,6 +32,17 @@ function Edit() {
       payload: e.target.value,
     });
   };
+
+  useEffect(() => {
+    dispatch({
+      type: 'GET_EDIT',
+    });
+    return () => {
+      dispatch({
+        type: 'CLEAR_EDIT',
+      });
+    };
+  }, []);
 
   return (
     <div className='edit-container'>
