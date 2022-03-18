@@ -19,10 +19,6 @@ function LeaderBoardView() {
     });
   }, []);
 
-  const handleWinnerClick = (id) => {
-    history.push(`/user/${id}`);
-  };
-
   const handleCardClick = (id) => {
     history.push(`/race/${id}`);
   };
