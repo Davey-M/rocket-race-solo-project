@@ -1,4 +1,36 @@
 .race-card {
   margin: 10px;
   background-color: white;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.race-card:hover {
+  cursor: pointer;
+  background-color: var(--dark-3);
+}
+
+.section {
+  display: inline-block;
+}
+
+.three {
+  color: var(--red-1);
+}
+
+.two {
+  color: var(--blue-1);
+}
+
+.two:hover {
+  cursor: pointer;
+  color: var(--blue-2);
+}
+
+.header {
+  margin: 0;
+  padding: 5px;
+  text-align: center;
 }

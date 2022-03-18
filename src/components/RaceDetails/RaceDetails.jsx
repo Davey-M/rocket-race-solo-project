@@ -18,22 +18,31 @@ function RaceDetails() {
 
   return (
     <>
-      <h1>Race Details</h1>
-      <p>{JSON.stringify(race)}</p>
+      <h2>{race.time}</h2>
+      <h1>Winner: {race.winner}</h1>
       <div>
-        {race.players &&
-          race.players
-            .sort((a, b) => a.sort - b.sort)
-            .map((player, index) => {
+        <h2 className='dark-back header'>Players</h2>
+        <div
+          style={{
+            backgroundColor: 'var(--blue-3)',
+            padding: '10px',
+          }}
+        >
+          {race.players
+            ?.sort((a, b) => a.place - b.place)
+            ?.map((player, index) => {
+              console.log(player);
               return (
                 <RaceCard
                   key={index}
-                  one={player.finish_time}
+                  one={`${player.finish_time} seconds`}
                   two={player.username}
                   three={player.place}
+                  player_id={player.user_id}
                 />
               );
             })}
+        </div>
       </div>
     </>
   );
