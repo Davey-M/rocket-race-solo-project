@@ -7,7 +7,12 @@
   align-items: center;
 }
 
-.race-card:hover {
+/* .race-card:hover {
+  cursor: pointer;
+  background-color: var(--dark-3);
+} */
+
+.clickable-card:hover {
   cursor: pointer;
   background-color: var(--dark-3);
 }

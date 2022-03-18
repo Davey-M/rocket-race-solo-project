@@ -1,7 +1,7 @@
 import { useHistory } from 'react-router-dom';
 import './RaceCard.css';
 
-function RaceCard({ one, two, three, player_id, click = () => {} }) {
+function RaceCard({ one, two, three, player_id, click = null }) {
   const history = useHistory();
 
   const goToId = () => {
@@ -10,11 +10,11 @@ function RaceCard({ one, two, three, player_id, click = () => {} }) {
 
   return (
     <div
-      className='card race-card'
+      className={click ? 'card race-card clickable-card' : 'card race-card'}
       onClick={(e) => {
         // console.log(e.nativeEvent.target.classList.contains('two'));
         let check = e.nativeEvent.target.classList.contains('two');
-        if (!check) {
+        if (!check && click) {
           click();
         }
       }}

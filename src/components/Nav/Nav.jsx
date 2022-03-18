@@ -50,16 +50,23 @@ function Nav() {
               <div
                 className='toggleImage circle'
                 onClick={() => setNavOpen(true)}
-              ></div>
+              >
+                {user.img && <img src={user.img} alt='Profile Image' />}
+              </div>
               {navOpen && (
                 <div className='dropdown card shadow'>
                   {/* Replace this element with a dropdown when it is created */}
                   <div
                     className='toggleImage circle'
                     onClick={() => setNavOpen(false)}
-                  ></div>
+                  >
+                    {user.img && <img src={user.img} alt='Profile Image' />}
+                  </div>
                   <Link className='navLink' to='/user'>
                     <p>Profile</p>
+                  </Link>
+                  <Link className='navLink' to='/edit'>
+                    <p>Edit Profile</p>
                   </Link>
                   <LogOutButton className='navLink' />
                 </div>
