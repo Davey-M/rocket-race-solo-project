@@ -1,9 +1,11 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import './Edit.css';
 
 function Edit() {
   const dispatch = useDispatch();
+  const history = useHistory();
   const edit = useSelector((store) => store.edit);
 
   const handleSubmit = (e) => {
@@ -14,7 +16,9 @@ function Edit() {
       payload: edit,
     });
 
-    console.log('submitting');
+    // console.log('submitting');
+
+    history.push('/user');
   };
 
   const handleImage = (e) => {
@@ -67,14 +71,20 @@ function Edit() {
             name=''
             id=''
             cols='30'
-            rows='3'
+            rows={5}
             value={edit.about}
             onChange={handleAbout}
           ></textarea>
         </div>
         <div className='button-container'>
           <button type='submit'>Save</button>
-          <button className='free red' type='button'>
+          <button
+            className='free red'
+            type='button'
+            onClick={() => {
+              history.push('/user');
+            }}
+          >
             Cancel
           </button>
         </div>
