@@ -24,6 +24,7 @@ import Home from '../Home/Home';
 import ProfilePage from '../ProfilePage/ProfilePage';
 import LeaderBoardView from '../LeaderBoardView/LeaderBoardView';
 import RaceDetails from '../RaceDetails/RaceDetails';
+import Edit from '../Edit/Edit';
 
 import Modal from '../Modal/Modal';
 import Race from '../Race/Race';
@@ -91,6 +92,10 @@ function App() {
             path='/user/:id'
           >
             <ProfilePage />
+          </ProtectedRoute>
+
+          <ProtectedRoute exact path='/edit'>
+            <Edit />
           </ProtectedRoute>
 
           <ProtectedRoute

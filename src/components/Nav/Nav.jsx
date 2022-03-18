@@ -61,6 +61,9 @@ function Nav() {
                   <Link className='navLink' to='/user'>
                     <p>Profile</p>
                   </Link>
+                  <Link className='navLink' to='/edit'>
+                    <p>Edit Profile</p>
+                  </Link>
                   <LogOutButton className='navLink' />
                 </div>
               )}
