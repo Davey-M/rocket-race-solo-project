@@ -1,12 +1,16 @@
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
+
+import RaceCard from '../RaceCard/RaceCard';
 
 import './ProfilePage.css';
 
 function ProfilePage() {
   const dispatch = useDispatch();
   const location = useLocation();
+  const history = useHistory();
+
   const user = useSelector((store) => store.user);
   const id = useParams().id ? useParams().id : user.id;
   const profile = useSelector((store) => store.profile);
@@ -43,11 +47,19 @@ function ProfilePage() {
               if (time == null) {
                 return;
               }
+
+              const handleClick = () => {
+                history.push(`/race/${profile.race_id[index]}`);
+              };
+
+              console.log(time);
               return (
-                <p key={index} className='card'>
-                  <span className='time'>{time}</span>
-                  <span className='place'>{profile.place[index]}</span>
-                </p>
+                <RaceCard
+                  key={index}
+                  one={time}
+                  three={profile.place[index]}
+                  click={handleClick}
+                />
               );
             })}
           </div>

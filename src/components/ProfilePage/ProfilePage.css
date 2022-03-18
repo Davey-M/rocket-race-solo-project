@@ -1,8 +1,27 @@
+.profile-container {
+  margin-top: 15vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 10px;
+}
+
 .profile-image {
-  width: 100px;
-  height: 100px;
+  width: 200px;
+  height: 200px;
+}
+
+.profile-info-container {
+  max-width: 300px;
 }
 
 .line {
   height: 3px;
+}
+
+.races-container {
+  /* overflow-y: scroll; */
+  /* height: 200px; */
+  min-width: 300px;
+  background-color: var(--blue-3);
 }
