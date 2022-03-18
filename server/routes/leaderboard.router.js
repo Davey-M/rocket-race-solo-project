@@ -51,7 +51,7 @@ router.get('/', async (req, res) => {
         "user"."username" as "winner",
         "users_races"."finish_time", "users_races"."race_id"
       FROM "race"
-      FULL JOIN "users_races"
+      JOIN "users_races"
         ON "race"."winner_id" = "users_races"."user_id" AND "race"."id" = "users_races"."race_id"
       JOIN "user"
         ON "race"."winner_id" = "user"."id"
