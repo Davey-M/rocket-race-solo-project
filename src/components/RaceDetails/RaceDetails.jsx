@@ -31,7 +31,7 @@ function RaceDetails() {
           {race.players
             ?.sort((a, b) => a.place - b.place)
             ?.map((player, index) => {
-              console.log(player);
+              // console.log(player);
               return (
                 <RaceCard
                   key={index}

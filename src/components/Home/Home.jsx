@@ -1,6 +1,14 @@
 import './Home.css';
 
+import { useHistory } from 'react-router-dom';
+
 function Home() {
+  const history = useHistory();
+
+  const handleRaceClick = () => {
+    history.push('/race');
+  };
+
   return (
     <>
       <div className='home-page-container'>
@@ -12,6 +20,8 @@ function Home() {
         </div>
       </div>
       <div className='sub-header'>
+        <button className='free red'>How To Play</button>
+        <button onClick={handleRaceClick}>Race</button>
         <h2>Race for peace and quiet.</h2>
       </div>
     </>

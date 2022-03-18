@@ -1,0 +1,12 @@
+.leaderboard-header {
+  margin: 20px 0px 0px 0px;
+  padding: 5px;
+  text-align: center;
+}
+
+.leaderboard-container {
+  background-color: var(--blue-3);
+  width: 90%;
+  max-width: 900px;
+  margin: auto;
+}
