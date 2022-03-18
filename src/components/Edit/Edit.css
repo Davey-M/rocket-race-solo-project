@@ -1,10 +1,43 @@
 .edit-container {
   margin: auto;
   margin-top: 15vh;
-  max-width: 900px;
+  width: 90%;
+  max-width: 600px;
 }
 
 .edit-header {
   padding: 5px;
   text-align: center;
+}
+
+.edit-form div {
+  margin-top: 10px;
+}
+
+.long-section {
+  width: calc(100% - 20px);
+}
+
+.long-section textarea {
+  width: 100%;
+  resize: none;
+  font-family: 'Roboto', sans-serif;
+}
+
+.long-section textarea {
+  padding: 10px;
+  background-color: var(--dark-3);
+  border: none;
+  font-size: 13.3px;
+  /* border-bottom: 5px solid var(--blue-1); */
+}
+
+.long-section textarea:focus-visible {
+  outline-color: var(--red-1);
+  /* outline: none; */
+  outline: 1px solid var(--red-1);
+}
+
+.button-container button {
+  margin-right: 10px;
 }
