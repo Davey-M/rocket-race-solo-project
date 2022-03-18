@@ -9,14 +9,12 @@ function Edit() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    console.log('submitting');
-  };
-
-  const handleUsername = (e) => {
     dispatch({
-      type: 'SET_USERNAME',
-      payload: e.target.value,
+      type: 'SAVE_EDIT',
+      payload: edit,
     });
+
+    console.log('submitting');
   };
 
   const handleImage = (e) => {
@@ -49,13 +47,9 @@ function Edit() {
       <h2 className='dark-back edit-header'>Edit Profile</h2>
       <form onSubmit={handleSubmit} className='edit-form'>
         <div>
-          <p>Username:</p>
-          <input
-            type='text'
-            placeholder='Username'
-            value={edit.username}
-            onChange={handleUsername}
-          />
+          <p>
+            <b>{edit.username}</b>
+          </p>
         </div>
         <div>
           <p>Image URL:</p>

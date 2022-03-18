@@ -2,11 +2,11 @@ import axios from 'axios';
 import { put, takeLatest } from 'redux-saga/effects';
 
 function* saveEdit(action) {
-  yield axios.put('/edit', action.payload);
+  yield axios.put('/api/edit', action.payload);
 }
 
 function* getEdit() {
-  let response = yield axios.get('/edit')
+  let response = yield axios.get('/api/edit')
   yield put({
     type: 'SET_EDIT',
     payload: response.data[0],

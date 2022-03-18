@@ -5,8 +5,6 @@ const edit = (state = {
 }, action) => {
 
   switch (action.type) {
-    case 'SET_USERNAME':
-      return { ...state, username: action.payload };
     case 'SET_IMAGE':
       return { ...state, image: action.payload };
     case 'SET_ABOUT':
