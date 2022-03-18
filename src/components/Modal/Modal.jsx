@@ -8,6 +8,7 @@ function Modal(props) {
   return (
     <>
       <div
+        style={{ zIndex: 100 }}
         className={props.open ? 'modal-container' : 'modal-container closed'}
         onClick={(e) => {
           if (e.target === outerComponent.current) {
