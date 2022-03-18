@@ -71,7 +71,7 @@ function Race() {
     // setY(newY);
     y = newY;
 
-    if (y >= 4000 && player?.place == null) {
+    if (y >= 8000 && player?.place == null) {
       // console.log('finishing');
       handleGameEnd();
       setFinished(true);
