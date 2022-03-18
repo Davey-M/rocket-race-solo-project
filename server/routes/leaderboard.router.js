@@ -46,7 +46,7 @@ router.get('/', async (req, res) => {
 
     const sqlText = `
       SELECT 
-        date("race"."time") as "time",
+        "race"."time",
         "user"."id" as "user_id",
         "user"."username" as "winner",
         "users_races"."finish_time", "users_races"."race_id"
