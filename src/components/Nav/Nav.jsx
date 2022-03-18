@@ -4,6 +4,9 @@ import LogOutButton from '../LogOutButton/LogOutButton';
 import './Nav.css';
 import { useSelector } from 'react-redux';
 
+import Modal from '../Modal/Modal';
+import { useLocation } from 'react-router-dom/cjs/react-router-dom.min';
+
 function Nav() {
   const user = useSelector((store) => store.user);
 
@@ -53,24 +56,25 @@ function Nav() {
               >
                 {user.img && <img src={user.img} alt='Profile Image' />}
               </div>
-              {navOpen && (
-                <div className='dropdown card shadow'>
-                  {/* Replace this element with a dropdown when it is created */}
-                  <div
-                    className='toggleImage circle'
-                    onClick={() => setNavOpen(false)}
-                  >
-                    {user.img && <img src={user.img} alt='Profile Image' />}
-                  </div>
-                  <Link className='navLink' to='/user'>
-                    <p>Profile</p>
-                  </Link>
-                  <Link className='navLink' to='/edit'>
-                    <p>Edit Profile</p>
-                  </Link>
-                  <LogOutButton className='navLink' />
+              <Modal
+                open={navOpen}
+                className='dropdown'
+                outerClick={() => setNavOpen(false)}
+              >
+                <div
+                  className='toggleImage circle'
+                  onClick={() => setNavOpen(false)}
+                >
+                  {user.img && <img src={user.img} alt='Profile Image' />}
                 </div>
-              )}
+                <Link className='navLink' to='/user'>
+                  <p>Profile</p>
+                </Link>
+                <Link className='navLink' to='/edit'>
+                  <p>Edit Profile</p>
+                </Link>
+                <LogOutButton className='navLink' />
+              </Modal>
             </div>
           </>
         )}

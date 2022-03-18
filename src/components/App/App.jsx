@@ -26,7 +26,6 @@ import LeaderBoardView from '../LeaderBoardView/LeaderBoardView';
 import RaceDetails from '../RaceDetails/RaceDetails';
 import Edit from '../Edit/Edit';
 
-import Modal from '../Modal/Modal';
 import Race from '../Race/Race';
 
 import './App.css';
@@ -57,17 +56,6 @@ function App() {
   return (
     <Router>
       <div>
-        {/* <Modal
-          outerClick={() => {
-            console.log('Hello from outer');
-          }}
-          onClick={() => {
-            console.log('inner');
-          }}
-        >
-          <h1>Hello World</h1>
-        </Modal> */}
-
         <Nav />
         <Switch>
           {/* Visiting localhost:3000 will redirect to localhost:3000/home */}
