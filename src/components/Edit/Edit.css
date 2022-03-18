@@ -1,0 +1,10 @@
+.edit-container {
+  margin: auto;
+  margin-top: 15vh;
+  max-width: 900px;
+}
+
+.edit-header {
+  padding: 5px;
+  text-align: center;
+}

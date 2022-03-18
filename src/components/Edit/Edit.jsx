@@ -1,8 +1,10 @@
+import './Edit.css';
+
 function Edit() {
   return (
-    <>
-      <h1>Edit Page</h1>
-    </>
+    <div className='edit-container'>
+      <h2 className='dark-back edit-header'>Edit Profile</h2>
+    </div>
   );
 }
 
