@@ -41,7 +41,7 @@ function ProfilePage() {
           <p>{profile.about || 'Nothing here'}</p>
         </div>
         <div className='races-container'>
-          <h2 className='dark-back'>Recent Races</h2>
+          <h2 className='dark-back profile-header'>Recent Races</h2>
           <div>
             {profile?.finish_time?.map((time, index) => {
               if (time == null) {
