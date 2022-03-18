@@ -18,6 +18,10 @@ function LeaderBoardView() {
     history.push(`/user/${id}`);
   };
 
+  const handleCardClick = (id) => {
+    history.push(`/race/${id}`);
+  };
+
   // console.log(leaderboard);
   return (
     <>
@@ -25,7 +29,11 @@ function LeaderBoardView() {
         {leaderboard.map((race, index) => {
           console.log(race);
           return (
-            <p key={index} className='card'>
+            <p
+              key={index}
+              className='card'
+              onClick={() => handleCardClick(race.race_id)}
+            >
               <span>{race.time.split('T')[0]}</span>
               <span onClick={() => handleWinnerClick(race.user_id)}>
                 {race.winner}
