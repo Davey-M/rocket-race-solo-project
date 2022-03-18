@@ -54,7 +54,7 @@ function ProfilePage() {
                 history.push(`/race/${profile.race_id[index]}`);
               };
 
-              console.log(time);
+              // console.log(time);
               return (
                 <RaceCard
                   key={index}
