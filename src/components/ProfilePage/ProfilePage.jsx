@@ -40,7 +40,11 @@ function ProfilePage() {
         <div className='profile-info-container'>
           <h1>{profile?.username}</h1>
           <div className='line blue-back'></div>
-          <p>{profile.about || 'Nothing here'}</p>
+          <p>
+            {profile.about || (
+              <span style={{ opacity: 0.3 }}>*No About Section*</span>
+            )}
+          </p>
         </div>
         <div className='races-container'>
           <h2 className='dark-back profile-header'>Recent Races</h2>
