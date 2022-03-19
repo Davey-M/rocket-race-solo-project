@@ -30,8 +30,11 @@
 }
 
 .races-container {
-  /* overflow-y: scroll; */
-  /* height: 200px; */
   min-width: 300px;
   background-color: var(--blue-3);
+}
+
+.races-scroll {
+  overflow-y: scroll;
+  height: 50vh;
 }
