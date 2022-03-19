@@ -39,3 +39,7 @@
   padding: 5px;
   text-align: center;
 }
+
+.delete-modal {
+  background-color: white;
+}

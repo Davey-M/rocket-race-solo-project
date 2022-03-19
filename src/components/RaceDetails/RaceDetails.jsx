@@ -8,6 +8,7 @@ function RaceDetails() {
   const dispatch = useDispatch();
   const id = useParams().id;
   const race = useSelector((store) => store.race);
+  const user = useSelector((store) => store.user);
 
   useEffect(() => {
     dispatch({
@@ -39,6 +40,7 @@ function RaceDetails() {
                   two={player.username}
                   three={player.place}
                   player_id={player.user_id}
+                  del={player.user_id === user.id}
                 />
               );
             })}
