@@ -38,4 +38,26 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+router.delete('/race/:id', async (req, res) => {
+  if (req.isAuthenticated()) {
+    try {
+      const deleteId = req.params.id;
+
+      const sqlText = `
+        DELETE FROM "users_races" WHERE "id" === $1 AND "user_id" === $2
+      `
+      const sqlOptions = [deleteId, req.user.id]
+
+      await pool.query(sqlText, sqlOptions);
+
+      res.sendStatus(201);
+    } catch (err) {
+      console.log('Error in delete route', err);
+      res.sendStatus(500);
+    }
+  } else {
+    res.sendStatus(403);
+  }
+})
+
 module.exports = router;
