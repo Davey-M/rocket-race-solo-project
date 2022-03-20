@@ -42,3 +42,15 @@
 .about-section {
   white-space: pre-wrap;
 }
+
+.profile-card-holder {
+  display: grid;
+  grid-template-columns: 1fr max-content;
+  align-items: center;
+  padding-right: 10px;
+}
+
+.delete-time:hover {
+  cursor: pointer;
+  color: var(--red-2);
+}

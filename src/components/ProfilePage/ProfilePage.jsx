@@ -60,12 +60,15 @@ function ProfilePage() {
 
               // console.log(time);
               return (
-                <RaceCard
-                  key={index}
-                  one={time}
-                  three={profile.place[index]}
-                  click={handleClick}
-                />
+                <div className='profile-card-holder'>
+                  <RaceCard
+                    key={index}
+                    one={time}
+                    three={profile.place[index]}
+                    click={handleClick}
+                  />
+                  <h3 className='red delete-time'>X</h3>
+                </div>
               );
             })}
           </div>
