@@ -38,3 +38,7 @@
   overflow-y: scroll;
   height: 50vh;
 }
+
+.about-section {
+  white-space: pre-wrap;
+}

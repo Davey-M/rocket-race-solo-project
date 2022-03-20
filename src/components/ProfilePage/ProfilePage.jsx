@@ -40,7 +40,7 @@ function ProfilePage() {
         <div className='profile-info-container'>
           <h1>{profile?.username}</h1>
           <div className='line blue-back'></div>
-          <p>
+          <p className='about-section'>
             {profile.about || (
               <span style={{ opacity: 0.3 }}>*No About Section*</span>
             )}
