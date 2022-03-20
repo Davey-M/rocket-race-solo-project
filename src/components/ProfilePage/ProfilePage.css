@@ -47,10 +47,24 @@
   display: grid;
   grid-template-columns: 1fr max-content;
   align-items: center;
-  padding-right: 10px;
+  /* padding-right: 10px; */
+}
+
+.profile-card-holder h3 {
+  margin-right: 10px;
 }
 
 .delete-time:hover {
   cursor: pointer;
   color: var(--red-2);
+}
+
+.delete-modal {
+  background-color: white;
+  min-width: 300px;
+  min-height: 200px;
+}
+
+.delete-modal-outer {
+  background-color: var(--shadow);
 }
