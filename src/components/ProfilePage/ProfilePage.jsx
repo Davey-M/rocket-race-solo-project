@@ -20,6 +20,11 @@ function ProfilePage() {
   const [deleteCheck, setDeleteCheck] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
 
+  const deleteTime = () => {
+    console.log('Deleting card', deleteId);
+    setDeleteCheck(false);
+  };
+
   useEffect(() => {
     console.log(id);
     dispatch({
@@ -65,14 +70,13 @@ function ProfilePage() {
 
               // console.log(time);
               return (
-                <div className='profile-card-holder'>
+                <div className='profile-card-holder' key={index}>
                   <RaceCard
-                    key={index}
                     one={time}
                     three={profile.place[index]}
                     click={handleClick}
                   />
-                  {id === user.id && (
+                  {Number(id) === user.id && (
                     <h3
                       className='red delete-time'
                       onClick={() => {
@@ -95,11 +99,12 @@ function ProfilePage() {
         className='delete-modal'
         outerClass='delete-modal-outer'
       >
-        <h1>Pizza Time!</h1>
-        <p>You are deleting {deleteId}</p>
-        <p>This cannot be undone</p>
         <div>
-          <button>Delete</button>
+          <h1>Are you sure?</h1>
+          <p>Deleting this race cannot be undone.</p>
+        </div>
+        <div className='buttons'>
+          <button onClick={deleteTime}>Delete</button>
           <div className='vert-gap'></div>
           <button className='free red' onClick={() => setDeleteCheck(false)}>
             Cancel

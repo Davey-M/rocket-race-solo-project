@@ -63,6 +63,13 @@
   background-color: white;
   min-width: 300px;
   min-height: 200px;
+
+  display: grid;
+  grid-template-rows: 1fr max-content;
+}
+
+.delete-modal .buttons {
+  text-align: center;
 }
 
 .delete-modal-outer {

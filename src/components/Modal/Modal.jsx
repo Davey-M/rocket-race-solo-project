@@ -14,7 +14,10 @@ function Modal(props) {
           props.outerClass
         }
         onClick={(e) => {
-          if (e.target === outerComponent.current) {
+          if (
+            e.target === outerComponent.current &&
+            typeof props.outerClick === 'function'
+          ) {
             props.outerClick();
           }
         }}
