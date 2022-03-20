@@ -40,7 +40,6 @@ function RaceDetails() {
                   two={player.username}
                   three={player.place}
                   player_id={player.user_id}
-                  del={player.user_id === user.id}
                 />
               );
             })}
