@@ -1,0 +1,16 @@
+.race-detail-container {
+  width: 90%;
+  max-width: 900px;
+  margin: auto;
+}
+
+.race-detail-list {
+  background-color: var(--blue-3);
+  padding: 10px;
+}
+
+.race-detail-details {
+  margin: 20px auto;
+  width: max-content;
+  text-align: center;
+}
