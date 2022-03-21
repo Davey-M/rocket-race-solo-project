@@ -98,6 +98,23 @@ function Race() {
     <>
       {socket && (
         <div className='game-board'>
+          {game?.map((racer, index) => {
+            if (racer.id === socket.id) return '';
+            console.log(racer);
+            return (
+              <div
+                key={index}
+                className='ship'
+                style={{
+                  marginTop: racer.x,
+                  marginLeft: racer.y,
+                  transform: `rotate(${racer.rotation}deg)`,
+                }}
+              >
+                <img src={redShip} alt='' />
+              </div>
+            );
+          })}
           <div
             className='ship me'
             style={{
@@ -108,21 +125,6 @@ function Race() {
           >
             <img src={blueShip} alt='' />
           </div>
-          {game?.map((racer) => {
-            if (racer.id === socket.id) return '';
-            return (
-              <div
-                className='ship'
-                style={{
-                  x: racer.x,
-                  y: racer.y,
-                  transform: `rotate(${racer.rotation}deg)`,
-                }}
-              >
-                <img src={redShip} alt='' />
-              </div>
-            );
-          })}
         </div>
       )}
     </>

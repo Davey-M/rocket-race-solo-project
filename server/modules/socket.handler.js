@@ -1,7 +1,7 @@
 let game = [];
 
 function socketHandler(socket, io) {
-  console.log(socket.id);
+  // console.log(socket.id);
 
   socket.join('room');
 
@@ -18,9 +18,11 @@ function socketHandler(socket, io) {
 
   socket.on('move', (shipState) => {
 
+    // console.log(shipState);
+
     game.forEach((ship, index) => {
       if (ship.id === shipState.id) {
-        ship = {
+        game[index] = {
           ...ship,
           ...shipState,
         }
