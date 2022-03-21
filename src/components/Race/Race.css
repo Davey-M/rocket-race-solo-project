@@ -3,6 +3,8 @@
   width: 80vmin;
   height: 80vmin;
   background-color: black;
+
+  overflow: hidden;
 }
 
 .ship {
@@ -10,14 +12,14 @@
   top: 0;
   left: 0;
 
-  width: 50px;
-  height: 100px;
+  width: max-content;
+  height: max-content;
 
   transform: translate(-50%, -50%);
 
-  background-color: blue;
+  transition: margin 0.2s, transform 0.2s;
 }
 
-.ship.me {
-  background-color: red;
+.ship img {
+  width: 50px;
 }

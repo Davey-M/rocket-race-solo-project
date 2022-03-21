@@ -3,6 +3,10 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import './Race.css';
 
+// ship image imports
+import blueShip from './blue-ship.png';
+import redShip from './red-ship.png';
+
 function Race() {
   const dispatch = useDispatch();
 
@@ -14,13 +18,13 @@ function Race() {
     y: 200,
     rotation: 0,
   });
-  // const player = {
-  //   x: 200,
-  //   y: 200,
-  //   rotation: 0,
-  // };
+  let playerLocal = {
+    x: 200,
+    y: 200,
+    rotation: 0,
+  };
   const playerSpeed = 100;
-  const turningSpeed = 10;
+  const turningSpeed = 45;
 
   // socket setup useEffect
   useEffect(() => {
@@ -35,6 +39,11 @@ function Race() {
       });
     });
 
+    setPlayer({
+      ...player,
+      id: socket?.id,
+    });
+
     return () => {
       socket?.removeAllListeners('message');
       socket?.removeAllListeners('ship-move');
@@ -43,31 +52,47 @@ function Race() {
 
   // keypress listener
   useEffect(() => {
+    socket?.emit('move', player);
+
     window.addEventListener('keydown', handleKeys);
 
     return () => {
       window.removeEventListener('keydown', handleKeys);
     };
-  }, []);
+  }, [player]);
 
-  function handleKeys(e) {
-    // console.log(e.key);
-
+  const handleKeys = (e) => {
+    // console.log(player);
     switch (e.key) {
       case 'ArrowUp':
         setPlayer({
-          id: socket?.id,
-          x: Math.sin(player.rotation) * playerSpeed + player.x,
-          y: Math.cos(player.rotation) * playerSpeed + player.y,
-          rotation: player.rotation,
+          ...player,
+          x:
+            Math.sin((player.rotation - 90) * 0.0174533) * playerSpeed +
+            player.x,
+          y:
+            Math.cos((player.rotation - 90) * 0.0174533) * playerSpeed +
+            player.y,
         });
-        // player.x = Math.sin(player.rotation) * playerSpeed + player.x;
-        // player.y = Math.cos(player.rotation) * playerSpeed + player.y;
-        return;
+        // playerLocal.x = Math.sin(player.rotation) * playerSpeed + player.x;
+        // playerLocal.y = Math.cos(player.rotation) * playerSpeed + player.y;
+        break;
+      case 'ArrowRight':
+        setPlayer({
+          ...player,
+          rotation: player.rotation + turningSpeed,
+        });
+        break;
+      case 'ArrowLeft':
+        setPlayer({
+          ...player,
+          rotation: player.rotation - turningSpeed,
+        });
+        break;
       default:
-        return;
+        break;
     }
-  }
+  };
 
   return (
     <>
@@ -80,9 +105,11 @@ function Race() {
               marginLeft: player.y,
               transform: `rotate(${player.rotation}deg)`,
             }}
-          ></div>
+          >
+            <img src={blueShip} alt='' />
+          </div>
           {game?.map((racer) => {
-            // if (racer.id === socket.id) return '';
+            if (racer.id === socket.id) return '';
             return (
               <div
                 className='ship'
@@ -91,7 +118,9 @@ function Race() {
                   y: racer.y,
                   transform: `rotate(${racer.rotation}deg)`,
                 }}
-              ></div>
+              >
+                <img src={redShip} alt='' />
+              </div>
             );
           })}
         </div>
