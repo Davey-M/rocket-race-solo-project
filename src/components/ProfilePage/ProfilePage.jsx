@@ -1,8 +1,9 @@
 import { useParams, useLocation, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import RaceCard from '../RaceCard/RaceCard';
+import Modal from '../Modal/Modal';
 
 import './ProfilePage.css';
 
@@ -14,6 +15,25 @@ function ProfilePage() {
   const user = useSelector((store) => store.user);
   const id = useParams().id ? useParams().id : user.id;
   const profile = useSelector((store) => store.profile);
+
+  // delete state
+  const [deleteCheck, setDeleteCheck] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
+
+  const deleteTime = () => {
+    console.log('Deleting card', deleteId);
+
+    dispatch({
+      type: 'DELETE_RACE',
+      payload: {
+        delete: deleteId,
+        user: user.id,
+      },
+    });
+
+    setDeleteCheck(false);
+    setDeleteId(null);
+  };
 
   useEffect(() => {
     console.log(id);
@@ -40,7 +60,7 @@ function ProfilePage() {
         <div className='profile-info-container'>
           <h1>{profile?.username}</h1>
           <div className='line blue-back'></div>
-          <p>
+          <p className='about-section'>
             {profile.about || (
               <span style={{ opacity: 0.3 }}>*No About Section*</span>
             )}
@@ -60,17 +80,47 @@ function ProfilePage() {
 
               // console.log(time);
               return (
-                <RaceCard
-                  key={index}
-                  one={time}
-                  three={profile.place[index]}
-                  click={handleClick}
-                />
+                <div className='profile-card-holder' key={index}>
+                  <RaceCard
+                    one={time}
+                    three={profile.place[index]}
+                    click={handleClick}
+                  />
+                  {Number(id) === user.id && (
+                    <h3
+                      className='red delete-time'
+                      onClick={() => {
+                        const card_id = profile.card_id[index];
+                        setDeleteId(card_id);
+                        setDeleteCheck(true);
+                      }}
+                    >
+                      X
+                    </h3>
+                  )}
+                </div>
               );
             })}
           </div>
         </div>
       </div>
+      <Modal
+        open={deleteCheck}
+        className='delete-modal'
+        outerClass='delete-modal-outer'
+      >
+        <div>
+          <h1>Are you sure?</h1>
+          <p>Deleting this race cannot be undone.</p>
+        </div>
+        <div className='buttons'>
+          <button onClick={deleteTime}>Delete</button>
+          <div className='vert-gap'></div>
+          <button className='free red' onClick={() => setDeleteCheck(false)}>
+            Cancel
+          </button>
+        </div>
+      </Modal>
     </>
   );
 }

@@ -8,6 +8,7 @@ function RaceDetails() {
   const dispatch = useDispatch();
   const id = useParams().id;
   const race = useSelector((store) => store.race);
+  const user = useSelector((store) => store.user);
 
   useEffect(() => {
     dispatch({

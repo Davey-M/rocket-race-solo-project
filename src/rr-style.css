@@ -39,6 +39,15 @@ p {
   display: block;
 }
 
+.hor-gap {
+  height: 10px;
+}
+
+.vert-gap {
+  display: inline-block;
+  width: 10px;
+}
+
 /* above are the basic setup stuff. Everything below is more specific. */
 
 .very-big {

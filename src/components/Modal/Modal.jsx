@@ -9,9 +9,15 @@ function Modal(props) {
     <>
       <div
         style={{ zIndex: 100 }}
-        className={props.open ? 'modal-container' : 'modal-container closed'}
+        className={
+          (props.open ? 'modal-container ' : 'modal-container closed ') +
+          props.outerClass
+        }
         onClick={(e) => {
-          if (e.target === outerComponent.current) {
+          if (
+            e.target === outerComponent.current &&
+            typeof props.outerClick === 'function'
+          ) {
             props.outerClick();
           }
         }}

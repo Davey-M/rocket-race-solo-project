@@ -38,3 +38,40 @@
   overflow-y: scroll;
   height: 50vh;
 }
+
+.about-section {
+  white-space: pre-wrap;
+}
+
+.profile-card-holder {
+  display: grid;
+  grid-template-columns: 1fr max-content;
+  align-items: center;
+  /* padding-right: 10px; */
+}
+
+.profile-card-holder h3 {
+  margin-right: 10px;
+}
+
+.delete-time:hover {
+  cursor: pointer;
+  color: var(--red-2);
+}
+
+.delete-modal {
+  background-color: white;
+  min-width: 300px;
+  min-height: 200px;
+
+  display: grid;
+  grid-template-rows: 1fr max-content;
+}
+
+.delete-modal .buttons {
+  text-align: center;
+}
+
+.delete-modal-outer {
+  background-color: var(--shadow);
+}
