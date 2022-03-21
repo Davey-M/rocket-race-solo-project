@@ -1,0 +1,23 @@
+.game-board {
+  position: relative;
+  width: 80vmin;
+  height: 80vmin;
+  background-color: black;
+}
+
+.ship {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 50px;
+  height: 100px;
+
+  transform: translate(-50%, -50%);
+
+  background-color: blue;
+}
+
+.ship.me {
+  background-color: red;
+}
