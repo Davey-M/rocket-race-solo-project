@@ -7,10 +7,16 @@ import React from 'react';
 
 function AboutPage() {
   return (
-    <div className="container">
-      <div>
-        <p>This about page is for anyone to read!</p>
-      </div>
+    <div>
+      <section>
+        <h1>How To Play</h1>
+      </section>
+      <section>
+        <h1>The story of the app</h1>
+      </section>
+      <section>
+        <h1>Acknowledgments</h1>
+      </section>
     </div>
   );
 }
