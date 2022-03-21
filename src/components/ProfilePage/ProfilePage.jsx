@@ -22,7 +22,17 @@ function ProfilePage() {
 
   const deleteTime = () => {
     console.log('Deleting card', deleteId);
+
+    dispatch({
+      type: 'DELETE_RACE',
+      payload: {
+        delete: deleteId,
+        user: user.id,
+      },
+    });
+
     setDeleteCheck(false);
+    setDeleteId(null);
   };
 
   useEffect(() => {

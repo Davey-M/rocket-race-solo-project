@@ -43,8 +43,11 @@ router.delete('/race/:id', async (req, res) => {
     try {
       const deleteId = req.params.id;
 
+      console.log(req.user);
+      console.log(deleteId);
+
       const sqlText = `
-        DELETE FROM "users_races" WHERE "id" === $1 AND "user_id" === $2
+        DELETE FROM "users_races" WHERE "id" = $1 AND "user_id" = $2
       `
       const sqlOptions = [deleteId, req.user.id]
 
