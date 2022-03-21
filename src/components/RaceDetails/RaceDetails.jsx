@@ -41,8 +41,9 @@ function RaceDetails() {
             // this functions formats the time it is invoked immediately
 
             // split the time and the date
-            let splitTime = race.time.split('T').join('Z').split('Z');
+            let splitTime = race?.time?.split('T').join('Z').split('Z');
 
+            if (!splitTime) return '';
             // the time is the second part of the split time
             let timer = splitTime[1].split(':');
 
