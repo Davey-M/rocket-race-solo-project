@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import './Race.css';
@@ -9,11 +9,16 @@ function Race() {
   const socket = useSelector((store) => store.socket);
   const game = useSelector((store) => store.game);
 
-  const player = {
+  const [player, setPlayer] = useState({
     x: 200,
     y: 200,
     rotation: 0,
-  };
+  });
+  // const player = {
+  //   x: 200,
+  //   y: 200,
+  //   rotation: 0,
+  // };
   const playerSpeed = 100;
   const turningSpeed = 10;
 
@@ -50,7 +55,14 @@ function Race() {
 
     switch (e.key) {
       case 'ArrowUp':
-        player.x = Math.sin(player.rotation) * player.x;
+        setPlayer({
+          id: socket?.id,
+          x: Math.sin(player.rotation) * playerSpeed + player.x,
+          y: Math.cos(player.rotation) * playerSpeed + player.y,
+          rotation: player.rotation,
+        });
+        // player.x = Math.sin(player.rotation) * playerSpeed + player.x;
+        // player.y = Math.cos(player.rotation) * playerSpeed + player.y;
         return;
       default:
         return;
@@ -70,7 +82,7 @@ function Race() {
             }}
           ></div>
           {game?.map((racer) => {
-            if (racer.id === socket.id) return '';
+            // if (racer.id === socket.id) return '';
             return (
               <div
                 className='ship'
