@@ -51,7 +51,8 @@ function socketHandler(socket, io) {
       startTime: null,
     }
 
-    emitGame(currentGameCode);
+    // emitGame(currentGameCode);
+    io.to(currentGameCode).emit('game-joined', games[currentGameCode]);
   })
 
   function emitGame(gameCode) {
@@ -78,9 +79,35 @@ function generateRandomCode() {
 }
 
 function generateRandomAsteroids() {
-  let asteroids = new Array(10).fill([]);
+  let asteroids = [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+  ];
 
-  console.log(asteroids);
+  // console.log(asteroids);
+  for (let asteroid of asteroids) {
+
+    for (let i = 0; i < 5; i++) {
+      asteroid.push({
+        x: Math.floor(Math.random() * 100) - 50,
+        y: Math.floor(Math.random() * 100) - 50,
+      })
+    }
+
+    // setup starting position
+    asteroid.push({
+      x: Math.floor(Math.random() * 900) - 100,
+      y: Math.floor(Math.random() * 100) - 50,
+    })
+  }
 
   return asteroids;
 }

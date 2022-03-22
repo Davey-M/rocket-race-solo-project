@@ -14,6 +14,7 @@ function Race() {
   const game = useSelector((store) => store.game);
 
   const [started, setStarted] = useState(false);
+  const [asteroids, setAsteroids] = useState(null);
 
   useEffect(() => {
     // when this component unmounts leave the game
@@ -41,6 +42,25 @@ function Race() {
         type: 'SET_GAME',
         payload: gameState,
       });
+    });
+
+    socket?.on('game-started', (gameState) => {
+      dispatch({
+        type: 'SET_GAME',
+        payload: gameState,
+      });
+
+      setStarted(true);
+    });
+
+    socket.on('game-joined', (gameState) => {
+      dispatch({
+        type: 'SET_GAME',
+        payload: gameState,
+      });
+
+      setAsteroids(gameState.asteroids);
+      setStarted(true); // test (should be removed)
     });
 
     setPlayer({
@@ -100,6 +120,14 @@ function Race() {
     socket?.emit('create-game');
   };
 
+  const startGame = () => {
+    socket?.emit('start-game');
+  };
+
+  const joinGame = () => {
+    socket?.emit('join-game' /* put the game code here */);
+  };
+
   return (
     <>
       {socket && (
@@ -122,6 +150,7 @@ function Race() {
                   marginBottom: player.y < 1600 ? -1 * (1600 - player.y) : 0,
                 }}
               >
+                {/* stars in the background */}
                 <div
                   className='game-board-stars'
                   style={{
@@ -129,7 +158,9 @@ function Race() {
                       player.y < 1600 ? (-1 * player.y) / 2 : (-1 * 1600) / 2,
                   }}
                 ></div>
-                {game?.map((racer, index) => {
+
+                {/* other client players */}
+                {game?.players.map((racer, index) => {
                   if (racer.id === socket.id) return '';
                   console.log(racer);
                   return (
@@ -146,6 +177,8 @@ function Race() {
                     </div>
                   );
                 })}
+
+                {/* this clients player */}
                 <div
                   className='ship me'
                   style={{
@@ -156,6 +189,23 @@ function Race() {
                 >
                   <img src={blueShip} alt='' />
                 </div>
+
+                {/* asteroids */}
+                {asteroids?.map((asteroid, index) => {
+                  let startingPos = asteroid[5];
+                  let movements = asteroid.filter((a, index) => index !== 5);
+
+                  return (
+                    <div
+                      className='asteroid'
+                      key={index}
+                      style={{
+                        marginLeft: startingPos.x,
+                        marginTop: startingPos.y + 150 * index,
+                      }}
+                    ></div>
+                  );
+                })}
               </div>
             </div>
           )}
