@@ -22,7 +22,7 @@ function socketHandler(socket, io) {
     // console.log(shipState);
 
     games[currentGameCode]?.players.forEach((ship, index) => {
-      if (ship.id === shipState.id) {
+      if (ship.id === socket.id) {
         games[currentGameCode].players[index] = {
           ...ship,
           ...shipState,

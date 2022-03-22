@@ -29,40 +29,37 @@ function main(socket, gameBoard) {
   // exit if socket does not exist
   if (!socket || !gameBoard) return;
 
-  // const canvas = gameBoard.current;
+  // the gameBoard DOM reference
   const board = gameBoard.current;
-  // const context = canvas.getContext('2d');
 
+  // setup the images we will use
   const blueRocket = document.createElement('img');
-  blueRocket.src = './blue-ship.PNG';
+  blueRocket.src = './blue-ship.png';
   blueRocket.height = 50;
 
+  const redRocket = document.createElement('img');
+  redRocket.src = './red-ship.png';
+  redRocket.height = 50;
+
+  // setup the player ship on the dom
   const playerShip = document.createElement('div');
   playerShip.classList.add('ship');
   playerShip.appendChild(blueRocket);
 
+  // setup the stars background DOM reference
   const stars = document.createElement('div');
   stars.classList.add('game-board-stars');
   board.appendChild(stars);
 
+  // put the player on the game board
   board.appendChild(playerShip);
-
-  // canvas.width = canvas.clientWidth;
-  // canvas.height = canvas.clientHeight;
 
   let player = { x: 200, y: 1950, rotation: 0 };
   const rocketSpeed = 50;
   const rotationSpeed = 45;
 
-  // console.log({ canvas, context });
-
+  // the draw function will move the ships whenever needed
   function draw() {
-    // context.clearRect(0, 0, canvas.width, canvas.height);
-
-    // context.fillStyle = 'red';
-    // // context.fillRect(square.x, square.y, 50, 50);
-    // context.drawImage(blueRocket, square.x, square.y, 30, 50);
-
     playerShip.style.marginLeft = `${player.x}px`;
     playerShip.style.marginTop = `${player.y}px`;
     playerShip.style.transform = `rotate(${player.rotation}deg)`;
@@ -81,25 +78,41 @@ function main(socket, gameBoard) {
 
   // remove the event listener when we leave the page
   window.addEventListener('hashchange', () => {
+    // clear the event listeners
     window.removeEventListener('keydown', handleTurn);
+
+    // clear the moveInterval
     clearInterval(moveInterval);
+
+    // remove the socket listeners
+    socket.removeAllListeners('ship-move');
+
+    // leave the game when we leave the page
+    socket.emit('leave');
   });
 
+  // set up socket listeners
+  socket.on('ship-move', drawAllShips);
+
+  // set up window listeners
   window.addEventListener('keydown', handleTurn);
 
+  // the move interval is responsible for moving the ship when needed
   let moveInterval = setInterval(() => {
+    // set the x and y positions of the player
     player.x = Math.sin(player.rotation * 0.0174533) * rocketSpeed + player.x;
     player.y =
       Math.cos((player.rotation + 180) * 0.0174533) * rocketSpeed + player.y;
 
+    // if the player is out of bounds reset their ship
     if (player.x > 700 || player.x < 0 || player.y > 2000) {
       player.y = 1950;
       player.x = 200;
-      player.rotation = 0;
+      // player.rotation = 0;
     }
 
     draw();
-  }, 400);
+  }, 300);
 
   function handleTurn(e) {
     switch (e.key) {
@@ -126,5 +139,7 @@ function main(socket, gameBoard) {
   //   square.y -= 50;
   // }, 500);
 
-  function logic() {}
+  function drawAllShips(gameState) {
+    console.log(gameState);
+  }
 }
