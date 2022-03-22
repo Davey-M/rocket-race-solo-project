@@ -26,11 +26,13 @@ function Race() {
     };
   }, []);
 
-  const [player, setPlayer] = useState({
-    x: 200,
-    y: 1950,
-    rotation: 0,
-  });
+  // const [player, setPlayer] = useState({
+  //   x: 200,
+  //   y: 1950,
+  //   rotation: 0,
+  // });
+  const player = useSelector((store) => store.player);
+
   const playerSpeed = 50;
   const turningSpeed = 45;
 
@@ -66,9 +68,17 @@ function Race() {
       setStarted(true); // test (should be removed)
     });
 
-    setPlayer({
-      ...player,
-      id: socket?.id,
+    // setPlayer({
+    //   ...player,
+    //   id: socket?.id,
+    // });
+
+    dispatch({
+      type: 'SET_PLAYER',
+      payload: {
+        ...player,
+        id: socket?.id,
+      },
     });
 
     return () => {
@@ -92,26 +102,51 @@ function Race() {
     // console.log(player);
     switch (e.key) {
       case 'ArrowUp':
-        setPlayer({
-          ...player,
-          x: Math.sin(player.rotation * 0.0174533) * playerSpeed + player.x,
-          y:
-            Math.cos((player.rotation - 180) * 0.0174533) * playerSpeed +
-            player.y,
+        // setPlayer({
+        //   ...player,
+        //   x: Math.sin(player.rotation * 0.0174533) * playerSpeed + player.x,
+        //   y:
+        //     Math.cos((player.rotation - 180) * 0.0174533) * playerSpeed +
+        //     player.y,
+        // });
+        dispatch({
+          type: 'SET_PLAYER',
+          payload: {
+            ...player,
+            x: Math.sin(player.rotation * 0.0174533) * playerSpeed + player.x,
+            y:
+              Math.cos((player.rotation - 180) * 0.0174533) * playerSpeed +
+              player.y,
+          },
         });
         // playerLocal.x = Math.sin(player.rotation) * playerSpeed + player.x;
         // playerLocal.y = Math.cos(player.rotation) * playerSpeed + player.y;
         break;
       case 'ArrowRight':
-        setPlayer({
-          ...player,
-          rotation: player.rotation + turningSpeed,
+        // setPlayer({
+        //   ...player,
+        // });
+
+        dispatch({
+          type: 'SET_PLAYER',
+          payload: {
+            ...player,
+            rotation: player.rotation + turningSpeed,
+          },
         });
         break;
       case 'ArrowLeft':
-        setPlayer({
-          ...player,
-          rotation: player.rotation - turningSpeed,
+        // setPlayer({
+        //   ...player,
+        //   rotation: player.rotation - turningSpeed,
+        // });
+
+        dispatch({
+          type: 'SET_PLAYER',
+          payload: {
+            ...player,
+            rotation: player.rotation - turningSpeed,
+          },
         });
         break;
       default:
