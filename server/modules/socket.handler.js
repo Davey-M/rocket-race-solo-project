@@ -12,7 +12,9 @@ function socketHandler(socket, io) {
   })
 
   socket.on('leave', () => {
-    games[currentGameCode]?.players.filter((s) => s.id !== socket.id);
+    if (!games[currentGameCode]) return;
+
+    games[currentGameCode].players = games[currentGameCode]?.players.filter((s) => s.id !== socket.id);
 
     emitGame(currentGameCode);
   })
@@ -33,19 +35,18 @@ function socketHandler(socket, io) {
     emitGame(currentGameCode);
   })
 
-  socket.on('create-game', () => {
+  socket.on('create-game', (playerState) => {
     currentGameCode = generateRandomCode();
 
     socket.join(currentGameCode);
 
     games[currentGameCode] = {
+      gameCode: currentGameCode,
       asteroids: generateRandomAsteroids(),
       players: [
         {
-          id: socket.id,
-          x: 200,
-          y: 1950,
-          rotation: 0,
+          finished: false,
+          ...playerState
         },
       ],
       startTime: null,
@@ -53,6 +54,33 @@ function socketHandler(socket, io) {
 
     // emitGame(currentGameCode);
     io.to(currentGameCode).emit('game-joined', games[currentGameCode]);
+  })
+
+  socket.on('join-game', ({ gameCode, playerState }) => {
+    currentGameCode = gameCode;
+    socket.join(gameCode);
+
+    games[gameCode]?.players.push({
+      finished: false,
+      ...playerState
+    })
+
+    io.to(currentGameCode).emit('game-joined', games[currentGameCode]);
+  })
+
+  socket.on('start-game', () => {
+    games[currentGameCode].startTime = Date.now() + 10_000;
+
+    io.to(currentGameCode).emit('game-started', games[currentGameCode]);
+  })
+
+  socket.on('finish-game', (finishedPlayer) => {
+    console.log({
+      gameCode: currentGameCode,
+      ...finishedPlayer
+    });
+
+    io.to(socket.id).emit('race-finished', games[currentGameCode]);
   })
 
   function emitGame(gameCode) {

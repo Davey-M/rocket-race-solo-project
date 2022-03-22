@@ -17,7 +17,7 @@
 
   overflow: hidden;
 
-  transition: margin 0.2s;
+  transition: margin 0.4s linear;
 }
 
 .game-board-stars {
@@ -32,7 +32,7 @@
   background-size: 50%;
   background-repeat: repeat;
 
-  transition: margin 0.2s;
+  transition: margin 0.4s linear;
 }
 
 .ship {
@@ -45,7 +45,7 @@
 
   transform: translate(-50%, -50%);
 
-  transition: margin 0.2s, transform 0.2s;
+  transition: margin 0.4s linear, transform 0.2s;
 }
 
 .ship img {
