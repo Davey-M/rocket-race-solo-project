@@ -13,6 +13,8 @@ function Race() {
   const socket = useSelector((store) => store.socket);
   const game = useSelector((store) => store.game);
 
+  const [started, setStarted] = useState(false);
+
   useEffect(() => {
     // when this component unmounts leave the game
     return () => {
@@ -94,52 +96,70 @@ function Race() {
     }
   };
 
+  const createGame = () => {
+    socket?.emit('create-game');
+  };
+
   return (
     <>
       {socket && (
-        <div className='game-board-container'>
-          <div
-            className='game-board'
-            style={{
-              marginBottom: player.y < 1600 ? -1 * (1600 - player.y) : 0,
-            }}
-          >
-            <div
-              className='game-board-stars'
-              style={{
-                marginBottom:
-                  player.y < 1600 ? (-1 * player.y) / 2 : (-1 * 1600) / 2,
-              }}
-            ></div>
-            {game?.map((racer, index) => {
-              if (racer.id === socket.id) return '';
-              console.log(racer);
-              return (
+        <>
+          {!started ? (
+            <div>
+              <div>
+                <button onClick={createGame}>Create Game</button>
+                <div>
+                  <input type='text' placeholder='Enter Game Code' />
+                  <button>Join Game</button>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className='game-board-container'>
+              <div
+                className='game-board'
+                style={{
+                  marginBottom: player.y < 1600 ? -1 * (1600 - player.y) : 0,
+                }}
+              >
                 <div
-                  key={index}
-                  className='ship'
+                  className='game-board-stars'
                   style={{
-                    marginLeft: racer.x + 'px',
-                    marginTop: racer.y + 'px',
-                    transform: `rotate(${racer.rotation}deg)`,
+                    marginBottom:
+                      player.y < 1600 ? (-1 * player.y) / 2 : (-1 * 1600) / 2,
+                  }}
+                ></div>
+                {game?.map((racer, index) => {
+                  if (racer.id === socket.id) return '';
+                  console.log(racer);
+                  return (
+                    <div
+                      key={index}
+                      className='ship'
+                      style={{
+                        marginLeft: racer.x + 'px',
+                        marginTop: racer.y + 'px',
+                        transform: `rotate(${racer.rotation}deg)`,
+                      }}
+                    >
+                      <img src={redShip} alt='' />
+                    </div>
+                  );
+                })}
+                <div
+                  className='ship me'
+                  style={{
+                    marginLeft: player.x + 'px',
+                    marginTop: player.y + 'px',
+                    transform: `rotate(${player.rotation}deg)`,
                   }}
                 >
-                  <img src={redShip} alt='' />
+                  <img src={blueShip} alt='' />
                 </div>
-              );
-            })}
-            <div
-              className='ship me'
-              style={{
-                marginLeft: player.x + 'px',
-                marginTop: player.y + 'px',
-                transform: `rotate(${player.rotation}deg)`,
-              }}
-            >
-              <img src={blueShip} alt='' />
+              </div>
             </div>
-          </div>
-        </div>
+          )}
+        </>
       )}
     </>
   );
