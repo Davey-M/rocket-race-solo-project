@@ -8,12 +8,18 @@ function socketHandler(socket, io) {
   game.push({
     id: socket.id,
     x: 200,
-    y: 200,
+    y: 1950,
     rotation: 0,
   });
 
   socket.conn.on('close', () => {
     game = game.filter((s) => s.id !== socket.id);
+    io.emit('ship-move', game)
+  })
+
+  socket.on('leave', () => {
+    game = game.filter((s) => s.id !== socket.id);
+    io.emit('ship-move', game)
   })
 
   socket.on('move', (shipState) => {

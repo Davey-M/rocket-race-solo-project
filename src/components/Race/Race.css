@@ -1,10 +1,38 @@
-.game-board {
+.game-board-container {
   position: relative;
-  width: 80vmin;
-  height: 80vmin;
+  top: 0;
+  left: 0;
+  height: 90vh;
+
+  overflow: hidden;
+}
+
+.game-board {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 700px;
+  height: 2000px;
   background-color: black;
 
   overflow: hidden;
+
+  transition: margin 0.2s;
+}
+
+.game-board-stars {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+
+  height: 130%;
+  width: 100%;
+
+  background-image: url(./stars.PNG);
+  background-size: 50%;
+  background-repeat: repeat;
+
+  transition: margin 0.2s;
 }
 
 .ship {
@@ -21,5 +49,5 @@
 }
 
 .ship img {
-  width: 50px;
+  height: 50px;
 }
