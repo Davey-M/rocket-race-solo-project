@@ -80,16 +80,16 @@ function generateRandomCode() {
 
 function generateRandomAsteroids() {
   let asteroids = [
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
+    [], [],
+    [], [],
+    [], [],
+    [], [],
+    [], [],
+    [], [],
+    [], [],
+    [], [],
+    [], [],
+    [], [],
   ];
 
   // console.log(asteroids);
@@ -97,7 +97,7 @@ function generateRandomAsteroids() {
 
     for (let i = 0; i < 5; i++) {
       asteroid.push({
-        x: Math.floor(Math.random() * 100) - 50,
+        x: Math.floor(Math.random() * 100),
         y: Math.floor(Math.random() * 100) - 50,
       })
     }

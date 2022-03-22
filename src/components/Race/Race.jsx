@@ -7,6 +7,9 @@ import './Race.css';
 import blueShip from './blue-ship.png';
 import redShip from './red-ship.png';
 
+// component imports
+import Asteroid from '../Asteroid/Asteroid';
+
 function Race() {
   const dispatch = useDispatch();
 
@@ -191,21 +194,13 @@ function Race() {
                 </div>
 
                 {/* asteroids */}
-                {asteroids?.map((asteroid, index) => {
-                  let startingPos = asteroid[5];
-                  let movements = asteroid.filter((a, index) => index !== 5);
-
-                  return (
-                    <div
-                      className='asteroid'
-                      key={index}
-                      style={{
-                        marginLeft: startingPos.x,
-                        marginTop: startingPos.y + 150 * index,
-                      }}
-                    ></div>
-                  );
-                })}
+                {asteroids?.map((asteroid, index) => (
+                  <Asteroid
+                    key={index}
+                    asteroid={asteroid}
+                    startingTop={index * 150}
+                  />
+                ))}
               </div>
             </div>
           )}
