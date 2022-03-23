@@ -303,6 +303,14 @@ function main(socket, gameBoard, user) {
     }
   }
 
+  // a is a point and b is a box with a width and height of 50
+  // we will be checking whether or not a is inside b
+  function checkCollision(a, b) {
+    return (
+      a.x >= b.x - 25 && a.x <= b.x + 25 && a.y >= b.y - 25 && a.y <= b.y + 25
+    );
+  }
+
   function removeListeners() {
     // clear the event listeners
     window.removeEventListener('keydown', handleTurn);
