@@ -6,6 +6,8 @@ import './Race.css';
 
 function Race() {
   const history = useHistory();
+
+  // refs
   const gameBoard = useRef();
 
   const socket = useSelector((store) => store.socket);
@@ -112,8 +114,9 @@ function Race() {
         <>
           {started ? (
             <div className='game-board-container'>
-              {/* <canvas ref={gameBoard} className='game-board'></canvas> */}
-              <div ref={gameBoard} className='game-board'></div>
+              <div ref={gameBoard} className='game-board'>
+                <canvas id='test-canvas' className='game-board canvas'></canvas>
+              </div>
             </div>
           ) : (
             <>
@@ -180,6 +183,16 @@ function main(socket, gameBoard, user, initialGameState) {
 
   // put the player on the game board
   board.appendChild(playerShip);
+
+  // setup test code
+  const testCanvas = document.getElementById('test-canvas');
+  const testContext = testCanvas.getContext('2d');
+
+  testCanvas.width = 700;
+  testCanvas.height = 2000;
+
+  testContext.fillStyle = 'red';
+  // setup test code
 
   let player = {
     id: socket.id,
@@ -351,11 +364,11 @@ function main(socket, gameBoard, user, initialGameState) {
       dom.asteroid.style.marginTop = `${dom.y}px`;
 
       if (dom.x > 700) {
-        dom.x = 0;
+        dom.x = -100;
       }
 
-      if (dom.y > 2000) {
-        dom.y = 0;
+      if (dom.y > 1900) {
+        dom.y = -100;
       }
 
       // if (checkCollision(player, dom) === true) {
@@ -374,22 +387,39 @@ function main(socket, gameBoard, user, initialGameState) {
     draw();
   }
 
-  let collisionCheckRate = 1000 / 20;
+  let collisionCheckRate = 1000 / 24;
   let collisionDeltaTime = Date.now();
   function watchAstroidCollisions() {
     if (Date.now() - collisionDeltaTime > collisionCheckRate) {
       collisionDeltaTime = Date.now();
 
+      testContext.clearRect(0, 0, testCanvas.width, testCanvas.height);
+
       let playerSpot = {
-        x: Number(playerShip.style.marginLeft.split('px')[0]),
-        y: Number(playerShip.style.marginTop.split('px')[0]),
+        x: Number(
+          window.getComputedStyle(playerShip)['margin-left'].split('px')[0],
+        ),
+        y:
+          Number(
+            window.getComputedStyle(playerShip)['margin-top'].split('px')[0],
+          ) + 10,
       };
+
+      // testContext.fillStyle = 'blue';
+      // testContext.fillRect(playerSpot.x, playerSpot.y, 30, 30);
+      // testContext.fillStyle = 'red';
 
       for (let a of asteroidDOM) {
         let position = {
-          x: Number(a.asteroid.style.marginLeft.split('px')[0]),
-          y: Number(a.asteroid.style.marginTop.split('px')[0]),
+          x: Number(
+            window.getComputedStyle(a.asteroid)['margin-left'].split('px')[0],
+          ),
+          y: Number(
+            window.getComputedStyle(a.asteroid)['margin-top'].split('px')[0],
+          ),
         };
+
+        // testContext.fillRect(position.x - 25, position.y - 25, 50, 50);
 
         if (checkCollision(playerSpot, position) === true) {
           transportPlayerToStart();
@@ -404,7 +434,16 @@ function main(socket, gameBoard, user, initialGameState) {
   // a is a point and b is a box with a width and height of 50
   // we will be checking whether or not a is inside b
   function checkCollision(a, b) {
-    return a.x >= b.x - 50 && a.x <= b.x && a.y >= b.y - 50 && a.y <= b.y;
+    return (
+      (a.x >= b.x - 25 &&
+        a.x <= b.x + 25 &&
+        a.y >= b.y - 25 &&
+        a.y <= b.y + 25) ||
+      (a.x + 30 >= b.x - 25 &&
+        a.x + 30 <= b.x + 25 &&
+        a.y + 30 >= b.y - 25 &&
+        a.y + 30 <= b.y + 25)
+    );
   }
 
   function removeListeners() {

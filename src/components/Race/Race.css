@@ -20,6 +20,12 @@
   transition: margin 0.4s linear;
 }
 
+.game-board.canvas {
+  background-color: transparent;
+  z-index: 10;
+  opacity: 0;
+}
+
 .game-board-stars {
   position: absolute;
   left: 0;
