@@ -6,6 +6,8 @@ import './Race.css';
 
 function Race() {
   const history = useHistory();
+
+  // refs
   const gameBoard = useRef();
 
   const socket = useSelector((store) => store.socket);
@@ -43,7 +45,7 @@ function Race() {
   useEffect(() => {
     if (!started) return;
 
-    main(socket, gameBoard, user);
+    main(socket, gameBoard, user, game);
   }, [socket, gameBoard, started]);
 
   const handleGameStart = () => {
@@ -112,8 +114,9 @@ function Race() {
         <>
           {started ? (
             <div className='game-board-container'>
-              {/* <canvas ref={gameBoard} className='game-board'></canvas> */}
-              <div ref={gameBoard} className='game-board'></div>
+              <div ref={gameBoard} className='game-board'>
+                <canvas id='test-canvas' className='game-board canvas'></canvas>
+              </div>
             </div>
           ) : (
             <>
@@ -152,7 +155,7 @@ function Race() {
 
 export default Race;
 
-function main(socket, gameBoard, user) {
+function main(socket, gameBoard, user, initialGameState) {
   // exit if socket does not exist
   if (!socket || !gameBoard.current) return;
 
@@ -181,6 +184,16 @@ function main(socket, gameBoard, user) {
   // put the player on the game board
   board.appendChild(playerShip);
 
+  // setup test code
+  const testCanvas = document.getElementById('test-canvas');
+  const testContext = testCanvas.getContext('2d');
+
+  testCanvas.width = 700;
+  testCanvas.height = 2000;
+
+  testContext.fillStyle = 'red';
+  // setup test code
+
   let player = {
     id: socket.id,
     username: user.username,
@@ -190,6 +203,12 @@ function main(socket, gameBoard, user) {
   };
   const rocketSpeed = 50;
   const rotationSpeed = 45;
+
+  // this array contains the list of asteroids that will be on the screen
+  let asteroidDOM = [];
+
+  // this is used to figure out which movement pattern we are using.
+  let asteroidIndex = 0;
 
   // the draw function will move the ships whenever needed
   function draw() {
@@ -204,7 +223,6 @@ function main(socket, gameBoard, user) {
       board.style.marginBottom = `0px`;
       stars.style.marginBottom = '-800px';
     }
-
     // window.requestAnimationFrame(draw);
   }
   draw();
@@ -233,8 +251,9 @@ function main(socket, gameBoard, user) {
 
     // if the player is out of bounds reset their ship
     if (player.x > 700 || player.x < 0 || player.y > 2000) {
-      player.y = 1950;
-      player.x = 200;
+      transportPlayerToStart();
+      // player.y = 1950;
+      // player.x = 200;
       // player.rotation = 0;
     } else if (player.y < -50) {
       socket.emit('finish-game', {
@@ -247,6 +266,8 @@ function main(socket, gameBoard, user) {
       clearInterval(moveInterval);
       return true;
     }
+
+    moveAsteroids();
 
     socket.emit('move', player);
 
@@ -301,6 +322,128 @@ function main(socket, gameBoard, user) {
         board.appendChild(p);
       }
     }
+  }
+
+  function setupAsteroids() {
+    initialGameState.asteroids.forEach((asteroid, index) => {
+      let aElement = document.createElement('div');
+      aElement.classList.add('asteroid');
+      aElement.style.marginLeft = `${asteroid[5].x}px`;
+      aElement.style.marginTop = `${asteroid[5].y + index * 100}px`;
+
+      asteroidDOM.push({
+        asteroid: aElement,
+        x: asteroid[5].x,
+        y: asteroid[5].y + index * 100,
+      });
+
+      board.appendChild(aElement);
+    });
+  }
+
+  function moveAsteroids() {
+    if (asteroidDOM.length === 0) {
+      setupAsteroids();
+    }
+
+    if (asteroidIndex >= 5) {
+      asteroidIndex = 0;
+    }
+
+    initialGameState.asteroids.forEach((asteroid, index) => {
+      // console.log(asteroidDOM);
+      // console.log(asteroid[asteroidIndex]);
+      let dom = asteroidDOM[index];
+
+      let movement = asteroid[asteroidIndex];
+
+      dom.x += movement.x;
+      dom.y += movement.y;
+
+      dom.asteroid.style.marginLeft = `${dom.x}px`;
+      dom.asteroid.style.marginTop = `${dom.y}px`;
+
+      if (dom.x > 700) {
+        dom.x = -100;
+      }
+
+      if (dom.y > 1900) {
+        dom.y = -100;
+      }
+
+      // if (checkCollision(player, dom) === true) {
+      //   console.log('BOOOM');
+      //   transportPlayerToStart();
+      // }
+    });
+
+    asteroidIndex++;
+  }
+
+  function transportPlayerToStart() {
+    player.y = 1950;
+    player.x = 200;
+
+    draw();
+  }
+
+  let collisionCheckRate = 1000 / 24;
+  let collisionDeltaTime = Date.now();
+  function watchAstroidCollisions() {
+    if (Date.now() - collisionDeltaTime > collisionCheckRate) {
+      collisionDeltaTime = Date.now();
+
+      testContext.clearRect(0, 0, testCanvas.width, testCanvas.height);
+
+      let playerSpot = {
+        x: Number(
+          window.getComputedStyle(playerShip)['margin-left'].split('px')[0],
+        ),
+        y:
+          Number(
+            window.getComputedStyle(playerShip)['margin-top'].split('px')[0],
+          ) + 10,
+      };
+
+      // testContext.fillStyle = 'blue';
+      // testContext.fillRect(playerSpot.x, playerSpot.y, 30, 30);
+      // testContext.fillStyle = 'red';
+
+      for (let a of asteroidDOM) {
+        let position = {
+          x: Number(
+            window.getComputedStyle(a.asteroid)['margin-left'].split('px')[0],
+          ),
+          y: Number(
+            window.getComputedStyle(a.asteroid)['margin-top'].split('px')[0],
+          ),
+        };
+
+        // testContext.fillRect(position.x - 25, position.y - 25, 50, 50);
+
+        if (checkCollision(playerSpot, position) === true) {
+          transportPlayerToStart();
+        }
+      }
+    }
+    // console.log(playerSpot);
+    window.requestAnimationFrame(watchAstroidCollisions);
+  }
+  watchAstroidCollisions();
+
+  // a is a point and b is a box with a width and height of 50
+  // we will be checking whether or not a is inside b
+  function checkCollision(a, b) {
+    return (
+      (a.x >= b.x - 25 &&
+        a.x <= b.x + 25 &&
+        a.y >= b.y - 25 &&
+        a.y <= b.y + 25) ||
+      (a.x + 30 >= b.x - 25 &&
+        a.x + 30 <= b.x + 25 &&
+        a.y + 30 >= b.y - 25 &&
+        a.y + 30 <= b.y + 25)
+    );
   }
 
   function removeListeners() {
