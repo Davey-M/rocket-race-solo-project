@@ -219,7 +219,13 @@ function main(socket, gameBoard, user, initialGameState) {
   for (let p of initialGameState.players) {
     const pElement = document.createElement('p');
     pElement.classList.add('place-marker');
-    pElement.textContent = p.username;
+    pElement.textContent = '-' + p.username;
+
+    if (p.id === socket.id) {
+      pElement.style.color = 'var(--blue-1)';
+    } else {
+      pElement.style.color = 'var(--red-1)';
+    }
 
     positionContainer.appendChild(pElement);
 
