@@ -64,5 +64,5 @@
 
   background-color: grey;
 
-  transition: margin 0.4s;
+  transition: margin 0.4s linear;
 }

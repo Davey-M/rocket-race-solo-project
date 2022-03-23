@@ -259,7 +259,7 @@ function main(socket, gameBoard, user, initialGameState) {
     socket.emit('move', player);
 
     draw();
-  }, 500);
+  }, 400);
 
   function handleTurn(e) {
     switch (e.key) {
@@ -354,10 +354,14 @@ function main(socket, gameBoard, user, initialGameState) {
         dom.x = 0;
       }
 
-      if (checkCollision(player, dom) === true) {
-        console.log('BOOOM');
-        transportPlayerToStart();
+      if (dom.y > 2000) {
+        dom.y = 0;
       }
+
+      // if (checkCollision(player, dom) === true) {
+      //   console.log('BOOOM');
+      //   transportPlayerToStart();
+      // }
     });
 
     asteroidIndex++;
@@ -370,12 +374,37 @@ function main(socket, gameBoard, user, initialGameState) {
     draw();
   }
 
+  let collisionCheckRate = 1000 / 20;
+  let collisionDeltaTime = Date.now();
+  function watchAstroidCollisions() {
+    if (Date.now() - collisionDeltaTime > collisionCheckRate) {
+      collisionDeltaTime = Date.now();
+
+      let playerSpot = {
+        x: Number(playerShip.style.marginLeft.split('px')[0]),
+        y: Number(playerShip.style.marginTop.split('px')[0]),
+      };
+
+      for (let a of asteroidDOM) {
+        let position = {
+          x: Number(a.asteroid.style.marginLeft.split('px')[0]),
+          y: Number(a.asteroid.style.marginTop.split('px')[0]),
+        };
+
+        if (checkCollision(playerSpot, position) === true) {
+          transportPlayerToStart();
+        }
+      }
+    }
+    // console.log(playerSpot);
+    window.requestAnimationFrame(watchAstroidCollisions);
+  }
+  watchAstroidCollisions();
+
   // a is a point and b is a box with a width and height of 50
   // we will be checking whether or not a is inside b
   function checkCollision(a, b) {
-    return (
-      a.x >= b.x - 25 && a.x <= b.x + 25 && a.y >= b.y - 25 && a.y <= b.y + 25
-    );
+    return a.x >= b.x - 50 && a.x <= b.x && a.y >= b.y - 50 && a.y <= b.y;
   }
 
   function removeListeners() {
