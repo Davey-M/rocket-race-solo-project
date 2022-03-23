@@ -21,7 +21,10 @@ function Race() {
 
   useEffect(() => {
     socket?.on('race-finished', (game) => {
-      setFinished(true);
+      // setFinished(true);
+      if (game.players.filter((s) => s.id === socket.id)[0].finishTime) {
+        setFinished(true);
+      }
       setGame(game);
     });
 
@@ -72,7 +75,7 @@ function Race() {
     //   rotation: 0,
     // });
     socket?.emit('join-game', {
-      gameCode: gameCodeValue,
+      gameCode: gameCodeValue.toLowerCase(),
       playerState: {
         id: socket.id,
         username: user.username,
@@ -97,8 +100,12 @@ function Race() {
           <div>
             {game.players
               .sort((a, b) => {
-                if (!a.finishTime || !b.finishTime) return 100;
-
+                if (a.finishTime === undefined) {
+                  return 1;
+                }
+                if (b.finishTime === undefined) {
+                  return -1;
+                }
                 return a.finishTime - b.finishTime;
               })
               .map((p, index) => {
@@ -243,36 +250,55 @@ function main(socket, gameBoard, user, initialGameState) {
   window.addEventListener('keydown', handleTurn);
 
   // the move interval is responsible for moving the ship when needed
-  let moveInterval = setInterval(() => {
-    // set the x and y positions of the player
-    player.x = Math.sin(player.rotation * 0.0174533) * rocketSpeed + player.x;
-    player.y =
-      Math.cos((player.rotation + 180) * 0.0174533) * rocketSpeed + player.y;
+  let moveInterval;
+  setupAsteroids();
 
-    // if the player is out of bounds reset their ship
-    if (player.x > 700 || player.x < 0 || player.y > 2000) {
-      transportPlayerToStart();
-      // player.y = 1950;
-      // player.x = 200;
-      // player.rotation = 0;
-    } else if (player.y < -50) {
-      socket.emit('finish-game', {
-        id: socket.id,
-        username: user.username,
-        user_id: user.id,
-        finishTime: Date.now(),
-      });
+  function setupGameLoop() {
+    if (Date.now() - initialGameState.startTime < 0) {
+      window.requestAnimationFrame(setupGameLoop);
+    } else {
+      moveInterval = setInterval(() => {
+        if (Date.now() - initialGameState.startTime < 0) {
+          if (asteroidDOM.length === 0) {
+            setupAsteroids();
+          }
+          return;
+        }
 
-      clearInterval(moveInterval);
-      return true;
+        // set the x and y positions of the player
+        player.x =
+          Math.sin(player.rotation * 0.0174533) * rocketSpeed + player.x;
+        player.y =
+          Math.cos((player.rotation + 180) * 0.0174533) * rocketSpeed +
+          player.y;
+
+        // if the player is out of bounds reset their ship
+        if (player.x > 700 || player.x < 0 || player.y > 2000) {
+          transportPlayerToStart();
+          // player.y = 1950;
+          // player.x = 200;
+          // player.rotation = 0;
+        } else if (player.y < -50) {
+          socket.emit('finish-game', {
+            id: socket.id,
+            username: user.username,
+            user_id: user.id,
+            finishTime: Date.now(),
+          });
+
+          clearInterval(moveInterval);
+          return true;
+        }
+
+        moveAsteroids();
+
+        socket.emit('move', player);
+
+        draw();
+      }, 400);
     }
-
-    moveAsteroids();
-
-    socket.emit('move', player);
-
-    draw();
-  }, 400);
+  }
+  setupGameLoop();
 
   function handleTurn(e) {
     switch (e.key) {
@@ -342,10 +368,6 @@ function main(socket, gameBoard, user, initialGameState) {
   }
 
   function moveAsteroids() {
-    if (asteroidDOM.length === 0) {
-      setupAsteroids();
-    }
-
     if (asteroidIndex >= 5) {
       asteroidIndex = 0;
     }

@@ -80,7 +80,14 @@ function socketHandler(socket, io) {
       ...finishedPlayer
     });
 
-    io.to(socket.id).emit('race-finished', games[currentGameCode]);
+    games[currentGameCode].players = games[currentGameCode].players.map((player) => {
+      if (player.id === socket.id) {
+        return finishedPlayer;
+      }
+      return player;
+    })
+
+    io.to(currentGameCode).emit('race-finished', games[currentGameCode]);
   })
 
   function emitGame(gameCode) {
