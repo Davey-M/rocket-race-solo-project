@@ -123,8 +123,8 @@ function generateRandomAsteroids() {
     [], [],
     [], [],
     [], [],
-    [], [],
-    [], [],
+    // [], [],
+    // [], [],
   ];
 
   // console.log(asteroids);
