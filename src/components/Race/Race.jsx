@@ -1,279 +1,149 @@
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+
 import './Race.css';
 
-import blueShip from './blue-ship.png';
-import redShip from './red-ship.png';
-
 function Race() {
-  const dispatch = useDispatch();
   const history = useHistory();
-  // get the socket instance from the reducer
+  const gameBoard = useRef();
+
   const socket = useSelector((store) => store.socket);
   const user = useSelector((store) => store.user);
 
-  const [spinAngle, setSpinAngle] = useState(90);
+  const [finished, setFinished] = useState(false);
+  const [started, setStarted] = useState(false);
+  const [game, setGame] = useState(null);
 
-  // const [game, setGame] = useState(null);
-  const game = useSelector((store) => store.game);
-  const [time, setTime] = useState(0.0);
-  const [inputValue, setInputValue] = useState('');
-  // const [y, setY] = useState(0);
-  let y = 0;
-  // let nextClickTime = 0;
-  const [nextClickTime, setNextClickTime] = useState(0);
-  const [clickAvailable, setClickAvailable] = useState(false);
-  const [finished, setFinished] = useState(game?.winner ? true : false);
-
-  let started = false;
-
-  // this useEffect sets up the io listeners subscriptions
-  useEffect(() => {
-    socket?.on('test', (stuff) => {
-      console.log(stuff);
-    });
-
-    // socket receives all the changes to the overall game state
-    socket?.on('update-game-state', (game) => {
-      // console.log(game);
-      // setGame(game);
-      dispatch({
-        type: 'SET_GAME',
-        payload: game,
-      });
-    });
-
-    // this socket sets the race clock
-    socket?.on('update-race-clock', (clock) => {
-      setTime(clock.raceClock);
-      // nextClickTime.shift(clock.clickIntervalClock);
-      // console.log(clock.clickIntervalClock);
-      setNextClickTime(clock.clickIntervalClock);
-      // clickAvailable = clock.available;
-      if (clickAvailable === false) {
-        setClickAvailable(clock.available);
-      }
-      setSpinAngle(((Date.now() - clock.clickIntervalClock) / 360) * 125 - 90);
-    });
-
-    // on component unmount we unsubscribe from all the io listeners
-    return () => {
-      socket.removeAllListeners('test');
-      socket.removeAllListeners('update-game-state');
-      socket.removeAllListeners('game-start');
-    };
-  }, []);
+  const [gameCodeValue, setGameCodeValue] = useState('');
 
   useEffect(() => {
-    let player = game?.players.filter((p) => p.socket_id === socket.id)[0];
-    let newY = player?.y;
-    // setY(newY);
-    y = newY;
-
-    if (y >= 8000 && player?.place == null) {
-      // console.log('finishing');
-      handleGameEnd();
+    socket?.on('race-finished', (game) => {
       setFinished(true);
-    }
+      setGame(game);
+    });
 
-    // setup the keydown listener
-    if (!player?.place) window.addEventListener('keydown', handleGo);
+    socket?.on('game-joined', (game) => {
+      setGame(game);
+    });
+
+    socket?.on('game-started', (game) => {
+      console.log('in game-started');
+      setGame(game);
+      setStarted(true);
+    });
+
     return () => {
-      // unsubscribe from the keydown listener
-      window.removeEventListener('keydown', handleGo);
+      socket?.removeAllListeners('race-finished');
+      socket?.removeAllListeners('game-joined');
+      socket?.removeAllListeners('game-started');
     };
-  }, [game, nextClickTime]);
+  }, [socket]);
 
-  const handleCreateGame = () => {
-    socket.emit('create-game', {
-      user_id: user.id,
+  useEffect(() => {
+    if (!started) return;
+
+    main(socket, gameBoard, user);
+  }, [socket, gameBoard, started]);
+
+  const handleGameStart = () => {
+    socket?.emit('start-game');
+  };
+
+  const handleGameCreate = () => {
+    socket?.emit('create-game', {
+      id: socket.id,
       username: user.username,
-      socket_id: socket.id,
-      x: 0,
-      y: 0,
+      x: 200,
+      y: 1950,
+      rotation: 0,
     });
   };
 
-  const handleJoinGame = () => {
-    socket.emit('join-game', {
-      game_id: inputValue,
-      user_id: user.id,
-      username: user.username,
-      socket_id: socket.id,
-      x: 0,
-      y: 0,
+  const handleGameJoin = () => {
+    // console.log({
+    //   gameCode: gameCodeValue,
+    //   id: socket.id,
+    //   username: user.username,
+    //   x: 200,
+    //   y: 1950,
+    //   rotation: 0,
+    // });
+    socket?.emit('join-game', {
+      gameCode: gameCodeValue,
+      playerState: {
+        id: socket.id,
+        username: user.username,
+        x: 200,
+        y: 1950,
+        rotation: 0,
+      },
     });
   };
 
-  const handleStartGame = () => {
-    socket.emit('start-game');
+  const goToHome = () => {
+    history.push('/home');
   };
 
-  const handleGo = () => {
-    // console.log(clickAvailable);
-    if (started || Date.now() > game?.startTime) {
-      if (!started) started = true;
-
-      // if (y >= 4000) {
-      //   handleGameEnd();
-      // }
-
-      // console.log({ nextClickTime: nextClickTime });
-
-      // let jump = 0;
-      let jump = Math.abs(Date.now() - nextClickTime);
-
-      socket.emit('update-player-position', y + 400 - jump * 1.5);
-
-      // setClickAvailable(false);
-      // console.log(game);
-    }
-  };
-
-  const handleGameEnd = () => {
-    socket.emit('finish-game', time);
-  };
-
-  const resetGame = () => {
-    dispatch({
-      type: 'SET_GAME',
-      payload: null,
-    });
-    history.push('/');
-  };
-
+  console.log({ game });
   return (
     <>
-      {!finished ? (
+      {finished ? (
+        <div>
+          <h1>Finished</h1>
+          <button onClick={goToHome}>New Game</button>
+          <div>
+            {game.players
+              .sort((a, b) => {
+                if (!a.finishTime || !b.finishTime) return 100;
+
+                return a.finishTime - b.finishTime;
+              })
+              .map((p, index) => {
+                return (
+                  <p key={index}>
+                    {p.username} {index + 1}
+                  </p>
+                );
+              })}
+          </div>
+        </div>
+      ) : (
         <>
-          <div className='race-view-container'>
-            <div className='info-container'>
-              <div className='spinner-container circle'>
-                <div className='shade-container'></div>
-                <div
-                  className='spinner'
-                  style={{
-                    transform: `rotate(${spinAngle}deg)`,
-                  }}
-                >
-                  <div></div>
-                </div>
-              </div>
-              <div className='pointer'></div>
-              <div className='time-container'>
-                <div className='red-back line'></div>
-                <h1>
-                  {time <= 0
-                    ? Math.abs(Math.floor(time / 100))
-                    : (time / 100).toFixed(2)}
-                </h1>
-                <div className='blue-back line'></div>
-              </div>
+          {started ? (
+            <div className='game-board-container'>
+              {/* <canvas ref={gameBoard} className='game-board'></canvas> */}
+              <div ref={gameBoard} className='game-board'></div>
             </div>
-            <div className='race-container'>
-              {game?.started ? (
-                <div
-                  className='game-board'
-                  style={{
-                    marginBottom:
-                      -1 *
-                        game?.players.filter(
-                          (p) => p.socket_id === socket.id,
-                        )[0].y +
-                      window.innerHeight / 4,
-                  }}
-                >
-                  {/* this is rendered if you are in a game and the game is started */}
-                  {game?.players.map((player, index) => {
-                    return (
-                      <div
-                        key={index}
-                        className={'rocket'}
-                        style={{
-                          marginBottom: player.y,
-                          left: index * 110,
-                        }}
-                      >
-                        <img
-                          src={
-                            player.socket_id === socket.id ? blueShip : redShip
-                          }
-                          height={100}
-                          alt='Ship Image'
-                        />
-                      </div>
-                    );
-                  })}
-                </div>
-              ) : (
+          ) : (
+            <>
+              <button onClick={handleGameCreate}>Create Game</button>
+
+              <div>
+                <input
+                  type='text'
+                  placeholder='Game Code'
+                  value={gameCodeValue}
+                  onChange={(e) => setGameCodeValue(e.target.value)}
+                />
+                <button onClick={handleGameJoin}>Join Game</button>
+              </div>
+
+              {game && (
                 <>
+                  <h1>{game.gameCode}</h1>
+                  {game.players[0].id === socket.id && (
+                    <button onClick={handleGameStart}>Start Game</button>
+                  )}
                   <div>
-                    {game ? (
-                      <>
-                        {/* this is only rendered if you are already in a game but it is not started */}
-                        <h1>Game Id: {game.game_id}</h1>
-                        <ul>
-                          <p>
-                            <b>Players:</b>
-                          </p>
-                          {game.players.map((item, index) => {
-                            return <li key={index}>{item.username}</li>;
-                          })}
-                        </ul>
-                        {/* this renders the start game button if you are the person who created the room
-                      the logic to validate this person is done within the socket on the server */}
-                        {game.players[0].socket_id === socket.id && (
-                          <button onClick={handleStartGame}>Start Game</button>
-                        )}
-                      </>
-                    ) : (
-                      <>
-                        {/* this is rendered if you are not in a game and it is not started */}
-                        <div>
-                          <button onClick={handleCreateGame}>
-                            Create Game
-                          </button>
-                        </div>
-                        <div>
-                          <input
-                            type='text'
-                            placeholder='Game Code'
-                            value={inputValue}
-                            onChange={(e) => setInputValue(e.target.value)}
-                          />
-                          <button onClick={handleJoinGame}>Join Game</button>
-                        </div>
-                      </>
-                    )}
+                    {game?.players.map((p, index) => {
+                      return <p key={index}>{p.username}</p>;
+                    })}
                   </div>
                 </>
               )}
-            </div>
-          </div>
-        </>
-      ) : (
-        <>
-          <h1>Finished!</h1>
-          <ul>
-            {game.players
-              .sort((a, b) => {
-                if (!a?.place || !b?.place) {
-                  return Infinity;
-                }
-                return a?.place - b?.place;
-              })
-              .map((player, index) => {
-                return (
-                  <li key={index}>
-                    <b>{player.username}</b> {Math.floor(player?.time) / 10}{' '}
-                    seconds {' / '}
-                    {player?.place}
-                  </li>
-                );
-              })}
-          </ul>
-          <button onClick={resetGame}>New Game</button>
+            </>
+          )}
         </>
       )}
     </>
@@ -281,3 +151,169 @@ function Race() {
 }
 
 export default Race;
+
+function main(socket, gameBoard, user) {
+  // exit if socket does not exist
+  if (!socket || !gameBoard.current) return;
+
+  // the gameBoard DOM reference
+  const board = gameBoard.current;
+
+  // setup the images we will use
+  const blueRocket = document.createElement('img');
+  blueRocket.src = './blue-ship.png';
+  blueRocket.height = 50;
+
+  const redRocket = document.createElement('img');
+  redRocket.src = './red-ship.png';
+  redRocket.height = 50;
+
+  // setup the player ship on the dom
+  const playerShip = document.createElement('div');
+  playerShip.classList.add('ship');
+  playerShip.appendChild(blueRocket);
+
+  // setup the stars background DOM reference
+  const stars = document.createElement('div');
+  stars.classList.add('game-board-stars');
+  board.appendChild(stars);
+
+  // put the player on the game board
+  board.appendChild(playerShip);
+
+  let player = {
+    id: socket.id,
+    username: user.username,
+    x: 200,
+    y: 1950,
+    rotation: 0,
+  };
+  const rocketSpeed = 50;
+  const rotationSpeed = 45;
+
+  // the draw function will move the ships whenever needed
+  function draw() {
+    playerShip.style.marginLeft = `${player.x}px`;
+    playerShip.style.marginTop = `${player.y}px`;
+    playerShip.style.transform = `rotate(${player.rotation}deg)`;
+
+    if (player.y < 1600) {
+      board.style.marginBottom = `${-1 * (1600 - player.y)}px`;
+      stars.style.marginBottom = `${(-1 * player.y) / 2}px`;
+    } else {
+      board.style.marginBottom = `0px`;
+      stars.style.marginBottom = '-800px';
+    }
+
+    // window.requestAnimationFrame(draw);
+  }
+  draw();
+
+  // remove the event listener when we leave the page
+  window.addEventListener('hashchange', removeListeners);
+  window.addEventListener('beforeunload', removeListeners);
+
+  // set up socket listeners
+  socket.on('ship-move', drawAllShips);
+
+  // socket.emit('join-game', {
+  //   gameCode: 'room',
+  //   playerState: player,
+  // });
+
+  // set up window listeners
+  window.addEventListener('keydown', handleTurn);
+
+  // the move interval is responsible for moving the ship when needed
+  let moveInterval = setInterval(() => {
+    // set the x and y positions of the player
+    player.x = Math.sin(player.rotation * 0.0174533) * rocketSpeed + player.x;
+    player.y =
+      Math.cos((player.rotation + 180) * 0.0174533) * rocketSpeed + player.y;
+
+    // if the player is out of bounds reset their ship
+    if (player.x > 700 || player.x < 0 || player.y > 2000) {
+      player.y = 1950;
+      player.x = 200;
+      // player.rotation = 0;
+    } else if (player.y < -50) {
+      socket.emit('finish-game', {
+        id: socket.id,
+        username: user.username,
+        user_id: user.id,
+        finishTime: Date.now(),
+      });
+
+      clearInterval(moveInterval);
+      return true;
+    }
+
+    socket.emit('move', player);
+
+    draw();
+  }, 400);
+
+  function handleTurn(e) {
+    switch (e.key) {
+      case 'ArrowRight':
+        player.rotation += rotationSpeed;
+        break;
+      case 'ArrowLeft':
+        player.rotation -= rotationSpeed;
+        break;
+      case 'd':
+        player.rotation += rotationSpeed;
+        break;
+      case 'a':
+        player.rotation -= rotationSpeed;
+        break;
+      default:
+        break;
+    }
+
+    socket.emit('move', player);
+
+    draw();
+  }
+
+  // setInterval(() => {
+  //   square.y -= 50;
+  // }, 500);
+
+  function drawAllShips(gameState) {
+    // console.log(gameState);
+
+    let players = gameState.players.filter((p) => p.id !== socket.id);
+
+    for (let player of players) {
+      let playerElement = document.getElementById(player.id);
+
+      if (playerElement) {
+        playerElement.style.marginLeft = `${player.x}px`;
+        playerElement.style.marginTop = `${player.y}px`;
+        playerElement.style.transform = `rotate(${player.rotation}deg)`;
+      } else {
+        let p = document.createElement('div');
+        p.classList.add('ship');
+        p.appendChild(redRocket);
+        p.id = player.id;
+
+        board.appendChild(p);
+      }
+    }
+  }
+
+  function removeListeners() {
+    // clear the event listeners
+    window.removeEventListener('keydown', handleTurn);
+
+    // clear the moveInterval
+    clearInterval(moveInterval);
+
+    // remove the socket listeners
+    socket.removeAllListeners('ship-move');
+
+    // leave the game when we leave the page
+    socket.emit('leave');
+  }
+}

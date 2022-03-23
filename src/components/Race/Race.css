@@ -1,126 +1,66 @@
-.race-view-container {
-  max-width: 900px;
-  display: flex;
-  gap: 10px;
-
-  margin: auto;
-
-  height: calc(100vh - 50px);
-}
-
-.info-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-}
-
-.spinner-container {
+.game-board-container {
   position: relative;
-  width: 200px;
-  height: 200px;
+  top: 0;
+  left: 0;
+  height: 90vh;
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  overflow: hidden;
 }
 
-@keyframes spin {
-  0% {
-    transform: rotate(90deg);
-  }
-  100% {
-    transform: rotate(450deg);
-  }
+.game-board {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 700px;
+  height: 2000px;
+  background-color: black;
+
+  overflow: hidden;
+
+  transition: margin 0.4s linear;
 }
 
-@keyframes click {
-  0% {
-    background-color: var(--dark-1);
-  }
+.game-board-stars {
+  position: absolute;
+  left: 0;
+  bottom: 0;
 
-  100% {
-    background-color: var(--red-1);
-  }
-}
-
-.spinner {
+  height: 130%;
   width: 100%;
-  height: 6px;
 
-  /* animation: spin 1s ease-in-out infinite; */
+  background-image: url(./stars.PNG);
+  background-size: 50%;
+  background-repeat: repeat;
+
+  transition: margin 0.4s linear;
 }
 
-.spinner div {
-  width: 55%;
-  height: 100%;
-
-  background-color: var(--blue-1);
-}
-
-.shade-container {
+.ship {
   position: absolute;
   top: 0;
   left: 0;
 
-  height: 50%;
-  width: 100%;
+  width: max-content;
+  height: max-content;
 
-  background-color: var(--red-3);
+  transform: translate(-50%, -50%);
 
-  z-index: 0;
-
-  /* opacity: 0.8; */
+  transition: margin 0.4s linear, transform 0.2s;
 }
 
-.pointer {
-  height: 20px;
-  width: 5px;
-
-  background-color: var(--blue-1);
-
-  z-index: 2;
-
-  margin-top: -10px;
+.ship img {
+  height: 50px;
 }
 
-.race-container {
-  position: relative;
-
-  overflow: hidden;
-
-  width: 100%;
-}
-
-.game-board {
-  background-image: url(./background.jpg);
-  background-size: cover;
+.asteroid {
   position: absolute;
-  height: 8000px;
-  width: 100%;
-
-  bottom: 0;
-  left: 10px;
-
-  z-index: -10;
-
-  transition: margin 0.5s ease-out;
-}
-
-.rocket {
-  position: absolute;
+  top: 0;
   left: 0;
-  bottom: 0;
 
-  /* width: 100px;
-  height: 100px; */
+  width: 50px;
+  height: 50px;
 
-  /* background-color: var(--red-1); */
+  background-color: grey;
 
-  transition: margin 0.5s ease-out;
-}
-
-.rocket.me {
-  background-color: var(--blue-1);
+  /* transition: margin 1s; */
 }
