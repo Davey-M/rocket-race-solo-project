@@ -111,6 +111,8 @@ function Race() {
               .map((p, index) => {
                 return (
                   <p key={index}>
+                    {p?.finishTime &&
+                      ((p.finishTime - game.startTime) / 1000).toFixed(3)}{' '}
                     {p.username} {index + 1}
                   </p>
                 );
@@ -356,6 +358,10 @@ function main(socket, gameBoard, user, initialGameState) {
       aElement.classList.add('asteroid');
       aElement.style.marginLeft = `${asteroid[5].x}px`;
       aElement.style.marginTop = `${asteroid[5].y + index * 100}px`;
+
+      aElement.style.animationDuration = `${
+        Math.floor(Math.random() * 30) + 10
+      }s`;
 
       asteroidDOM.push({
         asteroid: aElement,
