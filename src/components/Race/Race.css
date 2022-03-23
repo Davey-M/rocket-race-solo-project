@@ -1,8 +1,15 @@
+.game-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
 .game-board-container {
   position: relative;
   top: 0;
   left: 0;
   height: 90vh;
+  min-width: 700px;
 
   overflow: hidden;
 }
@@ -80,6 +87,23 @@
   animation: spin 2s linear infinite;
 
   background-color: grey;
+
+  transition: margin 0.4s linear;
+}
+
+.position-container {
+  position: relative;
+  height: 90vh;
+  width: max-content;
+  min-width: 200px;
+}
+
+.place-marker {
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  margin-top: 90vh;
 
   transition: margin 0.4s linear;
 }

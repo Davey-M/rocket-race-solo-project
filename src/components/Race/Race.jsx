@@ -122,11 +122,23 @@ function Race() {
       ) : (
         <>
           {started ? (
-            <div className='game-board-container'>
-              <div ref={gameBoard} className='game-board'>
-                <canvas id='test-canvas' className='game-board canvas'></canvas>
+            <>
+              <div className='game-container'>
+                <div className='game-board-container'>
+                  <div ref={gameBoard} className='game-board'>
+                    <canvas
+                      id='test-canvas'
+                      className='game-board canvas'
+                    ></canvas>
+                  </div>
+                </div>
+                <div
+                  id='positionContainer'
+                  className='position-container'
+                ></div>
+                <div className='timer-container'></div>
               </div>
-            </div>
+            </>
           ) : (
             <>
               <button onClick={handleGameCreate}>Create Game</button>
@@ -199,6 +211,21 @@ function main(socket, gameBoard, user, initialGameState) {
 
   testCanvas.width = 700;
   testCanvas.height = 2000;
+
+  // SETUP NAMES
+  const players = [];
+  const positionContainer = document.getElementById('positionContainer');
+
+  for (let p of initialGameState.players) {
+    const pElement = document.createElement('p');
+    pElement.classList.add('place-marker');
+    pElement.textContent = p.username;
+
+    positionContainer.appendChild(pElement);
+
+    players.push(pElement);
+  }
+  // SETUP NAMES
 
   testContext.fillStyle = 'red';
   // setup test code
@@ -332,24 +359,33 @@ function main(socket, gameBoard, user, initialGameState) {
   function drawAllShips(gameState) {
     // console.log(gameState);
 
-    let players = gameState.players.filter((p) => p.id !== socket.id);
+    let players = gameState.players; //.filter((p) => p.id !== socket.id);
 
-    for (let player of players) {
-      let playerElement = document.getElementById(player.id);
-
-      if (playerElement) {
-        playerElement.style.marginLeft = `${player.x}px`;
-        playerElement.style.marginTop = `${player.y}px`;
-        playerElement.style.transform = `rotate(${player.rotation}deg)`;
+    players.forEach((player, index) => {
+      if (player.id === socket.id) {
+        setNameMarker(player.y, index);
       } else {
-        let p = document.createElement('div');
-        p.classList.add('ship');
-        p.appendChild(redRocket);
-        p.id = player.id;
+        let playerElement = document.getElementById(player.id);
 
-        board.appendChild(p);
+        if (playerElement) {
+          playerElement.style.marginLeft = `${player.x}px`;
+          playerElement.style.marginTop = `${player.y}px`;
+          playerElement.style.transform = `rotate(${player.rotation}deg)`;
+        } else {
+          let p = document.createElement('div');
+          p.classList.add('ship');
+          p.appendChild(redRocket);
+          p.id = player.id;
+
+          board.appendChild(p);
+        }
+        setNameMarker(player.y, index);
       }
-    }
+    });
+  }
+
+  function setNameMarker(position, index) {
+    players[index].style.marginTop = `${(position * 90) / 2000}vh`;
   }
 
   function setupAsteroids() {
