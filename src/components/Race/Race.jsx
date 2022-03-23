@@ -136,7 +136,9 @@ function Race() {
                   id='positionContainer'
                   className='position-container'
                 ></div>
-                <div className='timer-container'></div>
+                <div className='timer-container'>
+                  <h1 id='timer'>0.00</h1>
+                </div>
               </div>
             </>
           ) : (
@@ -211,6 +213,25 @@ function main(socket, gameBoard, user, initialGameState) {
 
   testCanvas.width = 700;
   testCanvas.height = 2000;
+
+  const timerDeltaTime = Date.now();
+  const timerFramerate = 1000 / 20;
+
+  const timer = document.getElementById('timer');
+  function runTimer() {
+    if (Date.now() - timerDeltaTime > timerFramerate) {
+      let time = Date.now() - initialGameState.startTime;
+
+      if (time < 0) {
+        timer.textContent = Math.abs(Math.floor(time / 1000));
+      } else {
+        timer.textContent = (time / 1000).toFixed(2);
+      }
+    }
+
+    window.requestAnimationFrame(runTimer);
+  }
+  runTimer();
 
   // SETUP NAMES
   const players = [];
