@@ -1,3 +1,5 @@
+const pool = require('../modules/pool');
+
 let games = {};
 let gameCodes = [];
 
@@ -87,6 +89,10 @@ function socketHandler(socket, io) {
       return player;
     })
 
+    if (games[currentGameCode].players.filter((p) => !p.finishTime).length === 0) {
+      postRace(games[currentGameCode]);
+    }
+
     io.to(currentGameCode).emit('race-finished', games[currentGameCode]);
   })
 
@@ -97,6 +103,47 @@ function socketHandler(socket, io) {
 
 module.exports = socketHandler;
 
+async function postRace(race) {
+  try {
+    const players = race.players.sort((a, b) => {
+      if (a.finishTime === undefined) {
+        return 1;
+      }
+      if (b.finishTime === undefined) {
+        return -1;
+      }
+      return a.finishTime - b.finishTime;
+    })
+
+    const sqlText = `
+      INSERT INTO "race" ("winner_id", "time")
+      VALUES ($1, to_timestamp($2 / 1000.0))
+      RETURNING "id";
+    `
+    const sqlOptions = [players[0].user_id, race.startTime]
+
+    let response = await pool.query(sqlText, sqlOptions);
+
+    for (let i = 0; i < players.length; i++) {
+      const player = players[i];
+
+      const playerSqlText = `
+        INSERT INTO "users_races" ("user_id", "race_id", "finish_time", "place")
+        VALUES ($1, $2, $3, $4);
+      `
+      const playerSqlOptions = [
+        player.user_id,
+        response.rows[0].id,
+        ((player.finishTime - race.startTime) / 1000).toFixed(2),
+        i + 1,
+      ];
+
+      await pool.query(playerSqlText, playerSqlOptions);
+    }
+  } catch (err) {
+    console.log('Error posing to database', err);
+  }
+}
 
 const codeSymbols = '1234567890abcedfghijklmnopqrstuvwxyz';
 function generateRandomCode() {

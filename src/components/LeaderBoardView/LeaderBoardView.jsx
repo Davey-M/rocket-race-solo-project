@@ -30,12 +30,13 @@ function LeaderBoardView() {
         <h2 className='dark-back leaderboard-header'>Leaderboard</h2>
         {leaderboard.map((race, index) => {
           // console.log(race);
+          const time = new Date(race.time);
           return (
             <RaceCard
               key={index}
-              one={race.time.split('T')[0]}
+              one={time.toLocaleDateString()}
               two={race.winner}
-              three={race.finish_time}
+              three={race.finish_time + ' seconds'}
               player_id={race.user_id}
               click={() => handleCardClick(race.race_id)}
             />
