@@ -59,6 +59,9 @@ function AboutPage() {
       </section>
       <section>
         <h1 className='dark-back about-header'>Acknowledgments</h1>
+        <div className='content'>
+          <p>Thank you.</p>
+        </div>
       </section>
     </div>
   );
