@@ -1,0 +1,27 @@
+.about-container {
+  width: 90%;
+  max-width: 900px;
+  margin: 15vh auto 0px;
+}
+
+.about-header {
+  padding: 5px;
+  text-align: center;
+}
+
+section .content {
+  width: 90%;
+  margin: auto;
+}
+
+.story-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.story-grid p {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

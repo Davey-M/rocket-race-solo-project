@@ -9,6 +9,10 @@ function Home() {
     history.push('/race');
   };
 
+  const handleHowClick = () => {
+    history.push('/about');
+  };
+
   return (
     <>
       <div className='home-page-container'>
@@ -20,7 +24,9 @@ function Home() {
         </div>
       </div>
       <div className='sub-header'>
-        <button className='free red'>How To Play</button>
+        <button onClick={handleHowClick} className='free red'>
+          How To Play
+        </button>
         <button onClick={handleRaceClick}>Race</button>
         <h2>Race for peace and quiet.</h2>
       </div>
