@@ -257,6 +257,16 @@ function main(socket, gameBoard, user, initialGameState) {
   }
   // SETUP NAMES
 
+  // asteroid imports
+  const asteroidImages = [
+    './asteroids/1.png',
+    './asteroids/2.png',
+    './asteroids/3.png',
+    './asteroids/4.png',
+    './asteroids/5.png',
+  ];
+  // asteroid imports
+
   testContext.fillStyle = 'red';
   // setup test code
 
@@ -426,6 +436,11 @@ function main(socket, gameBoard, user, initialGameState) {
       aElement.classList.add('asteroid');
       aElement.style.marginLeft = `${asteroid[5].x}px`;
       aElement.style.marginTop = `${asteroid[5].y + index * 100}px`;
+
+      // setup an asteroid image and append it to the asteroid div
+      let asteroidImage = document.createElement('img');
+      asteroidImage.src = asteroidImages[Math.floor(Math.random() * 5)];
+      aElement.appendChild(asteroidImage);
 
       aElement.style.animationDuration = `${
         Math.floor(Math.random() * 30) + 10

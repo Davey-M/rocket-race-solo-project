@@ -87,9 +87,17 @@
 
   animation: spin 2s linear infinite;
 
-  background-color: grey;
+  /* background-color: grey; */
 
   transition: margin 0.4s linear;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.asteroid img {
+  width: 100%;
 }
 
 .position-container {
