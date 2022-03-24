@@ -2,8 +2,9 @@
   margin: 10px;
   background-color: white;
 
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr max-content 1fr;
+  /* justify-content: space-between; */
   align-items: center;
 }
 
@@ -22,6 +23,7 @@
 }
 
 .three {
+  text-align: end;
   color: var(--red-1);
 }
 

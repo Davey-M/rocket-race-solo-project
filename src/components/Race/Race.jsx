@@ -4,6 +4,9 @@ import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 import './Race.css';
 
+import beachImage from '../AboutPage/Peace.jpg';
+import crowdedImage from '../AboutPage/Crowded.jpg';
+
 function Race() {
   const history = useHistory();
 
@@ -16,6 +19,7 @@ function Race() {
   const [finished, setFinished] = useState(false);
   const [started, setStarted] = useState(false);
   const [game, setGame] = useState(null);
+  const [loadingDots, setLoadingDots] = useState('.');
 
   const [gameCodeValue, setGameCodeValue] = useState('');
 
@@ -44,6 +48,20 @@ function Race() {
       socket?.removeAllListeners('game-started');
     };
   }, [socket]);
+
+  useEffect(() => {
+    let dotInterval = setInterval(() => {
+      if (loadingDots.length > 3) {
+        setLoadingDots('.');
+      } else {
+        setLoadingDots(loadingDots + '.');
+      }
+    }, 500);
+
+    return () => {
+      clearInterval(dotInterval);
+    };
+  }, [loadingDots]);
 
   useEffect(() => {
     if (!started) return;
@@ -94,29 +112,53 @@ function Race() {
   return (
     <>
       {finished ? (
-        <div>
-          <h1>Finished</h1>
-          <button onClick={goToHome}>New Game</button>
+        <div className='game-controls-container'>
           <div>
-            {game.players
-              .sort((a, b) => {
-                if (a.finishTime === undefined) {
-                  return 1;
-                }
-                if (b.finishTime === undefined) {
-                  return -1;
-                }
-                return a.finishTime - b.finishTime;
-              })
-              .map((p, index) => {
-                return (
-                  <p key={index}>
-                    {p?.finishTime &&
-                      ((p.finishTime - game.startTime) / 1000).toFixed(3)}{' '}
-                    {p.username} {index + 1}
-                  </p>
-                );
-              })}
+            {game.players.sort((a, b) => {
+              if (a.finishTime === undefined) {
+                return 1;
+              }
+              if (b.finishTime === undefined) {
+                return -1;
+              }
+              return a.finishTime - b.finishTime;
+            })[0].id === socket.id ? (
+              <img src={beachImage} alt='winning image' width={500} />
+            ) : (
+              <img src={crowdedImage} alt='losing image' width={500} />
+            )}
+            <h1>Finished!</h1>
+            <button onClick={goToHome}>New Game</button>
+            <div>
+              <h3>Players:</h3>
+              {game.players
+                .sort((a, b) => {
+                  if (a.finishTime === undefined) {
+                    return 1;
+                  }
+                  if (b.finishTime === undefined) {
+                    return -1;
+                  }
+                  return a.finishTime - b.finishTime;
+                })
+                .map((p, index) => {
+                  return (
+                    <p key={index}>
+                      <span className={socket.id === p.id ? 'blue' : 'red'}>
+                        {p.finishTime && index + 1 + '.'}
+                      </span>{' '}
+                      <b>{p.username}</b>{' '}
+                      {p?.finishTime ? (
+                        '- ' +
+                        ((p.finishTime - game.startTime) / 1000).toFixed(3) +
+                        ' seconds'
+                      ) : (
+                        <span>{loadingDots}</span>
+                      )}
+                    </p>
+                  );
+                })}
+            </div>
           </div>
         </div>
       ) : (
@@ -142,33 +184,40 @@ function Race() {
               </div>
             </>
           ) : (
-            <>
-              <button onClick={handleGameCreate}>Create Game</button>
-
-              <div>
-                <input
-                  type='text'
-                  placeholder='Game Code'
-                  value={gameCodeValue}
-                  onChange={(e) => setGameCodeValue(e.target.value)}
-                />
-                <button onClick={handleGameJoin}>Join Game</button>
-              </div>
-
-              {game && (
-                <>
-                  <h1>{game.gameCode}</h1>
-                  {game.players[0].id === socket.id && (
+            <div className='game-controls-container'>
+              {game ? (
+                <div>
+                  <h1 className='very-big'>{game.gameCode}</h1>
+                  {game.players[0].id === socket.id ? (
                     <button onClick={handleGameStart}>Start Game</button>
+                  ) : (
+                    <p>Waiting for host to start the game...</p>
                   )}
                   <div>
-                    {game?.players.map((p, index) => {
-                      return <p key={index}>{p.username}</p>;
-                    })}
+                    <h3>players:</h3>
+                    <ul>
+                      {game?.players.map((p, index) => {
+                        return <li key={index}>{p.username}</li>;
+                      })}
+                    </ul>
                   </div>
-                </>
+                </div>
+              ) : (
+                <div>
+                  <button onClick={handleGameCreate}>Create Game</button>
+
+                  <div>
+                    <input
+                      type='text'
+                      placeholder='Game Code'
+                      value={gameCodeValue}
+                      onChange={(e) => setGameCodeValue(e.target.value)}
+                    />
+                    <button onClick={handleGameJoin}>Join Game</button>
+                  </div>
+                </div>
               )}
-            </>
+            </div>
           )}
         </>
       )}
@@ -257,6 +306,16 @@ function main(socket, gameBoard, user, initialGameState) {
   }
   // SETUP NAMES
 
+  // asteroid imports
+  const asteroidImages = [
+    './asteroids/1.png',
+    './asteroids/2.png',
+    './asteroids/3.png',
+    './asteroids/4.png',
+    './asteroids/5.png',
+  ];
+  // asteroid imports
+
   testContext.fillStyle = 'red';
   // setup test code
 
@@ -299,6 +358,7 @@ function main(socket, gameBoard, user, initialGameState) {
 
   // set up socket listeners
   socket.on('ship-move', drawAllShips);
+  socket.emit('move', player);
 
   // socket.emit('join-game', {
   //   gameCode: 'room',
@@ -427,6 +487,11 @@ function main(socket, gameBoard, user, initialGameState) {
       aElement.style.marginLeft = `${asteroid[5].x}px`;
       aElement.style.marginTop = `${asteroid[5].y + index * 100}px`;
 
+      // setup an asteroid image and append it to the asteroid div
+      let asteroidImage = document.createElement('img');
+      asteroidImage.src = asteroidImages[Math.floor(Math.random() * 5)];
+      aElement.appendChild(asteroidImage);
+
       aElement.style.animationDuration = `${
         Math.floor(Math.random() * 30) + 10
       }s`;
@@ -456,16 +521,22 @@ function main(socket, gameBoard, user, initialGameState) {
       dom.x += movement.x;
       dom.y += movement.y;
 
-      dom.asteroid.style.marginLeft = `${dom.x}px`;
-      dom.asteroid.style.marginTop = `${dom.y}px`;
-
-      if (dom.x > 700) {
+      if (dom.x > 750) {
+        dom.asteroid.style.transition = 'none';
         dom.x = -100;
       }
 
-      if (dom.y > 1900) {
+      if (dom.y > 1800) {
+        dom.asteroid.style.transition = 'none';
         dom.y = -100;
       }
+
+      dom.asteroid.style.marginLeft = `${dom.x}px`;
+      dom.asteroid.style.marginTop = `${dom.y}px`;
+
+      setTimeout(() => {
+        dom.asteroid.style.transition = 'margin 0.4s linear';
+      }, 1);
 
       // if (checkCollision(player, dom) === true) {
       //   console.log('BOOOM');
@@ -480,7 +551,13 @@ function main(socket, gameBoard, user, initialGameState) {
     player.y = 1950;
     player.x = 200;
 
+    playerShip.style.transition = 'none';
+
     draw();
+
+    setTimeout(() => {
+      playerShip.style.transition = 'margin 0.4s linear, transform 0.2s';
+    }, 1);
   }
 
   let collisionCheckRate = 1000 / 10;

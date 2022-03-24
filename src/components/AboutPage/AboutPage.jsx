@@ -61,7 +61,42 @@ function AboutPage() {
       <section>
         <h1 className='dark-back about-header'>Acknowledgments</h1>
         <div className='content'>
-          <p>Thank you.</p>
+          <div>
+            <h3>Thank You:</h3>
+            <ul>
+              <li>Prime Digital Academy</li>
+              <li>Liz Kerber</li>
+              <li>The Adams Cohort</li>
+              <li>My Family</li>
+              <li>Monica</li>
+            </ul>
+            <p>I could not have done this without all of your support.</p>
+          </div>
+          <div>
+            <h3>Technologies:</h3>
+            <ul>
+              <li>React</li>
+              <li>Socket.io</li>
+              <li>Express.js</li>
+              <li>Node.js</li>
+              <li>React Redux</li>
+              <li>Javascript</li>
+              <li>HTML/CSS</li>
+              <li>Postgresql</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Contact:</h3>
+            <p>
+              <b>Email:</b> davey.meuer@gmail.com
+            </p>
+            <p>
+              <b>Github:</b> github.com/Davey-M
+            </p>
+            <p>
+              <b>LinkedIn:</b> www.linkedin.com/in/david-meuer-218611152
+            </p>
+          </div>
         </div>
       </section>
     </div>
