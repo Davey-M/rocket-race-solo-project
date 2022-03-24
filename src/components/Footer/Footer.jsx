@@ -21,6 +21,18 @@ function Footer() {
 }
 
 function FooterContent() {
-  return <footer>&copy; Prime Digital Academy</footer>;
+  return (
+    <footer>
+      <a href='mailto:davey.meuer@gmail.com'>
+        <p>Contact Me</p>
+      </a>
+      <h3>
+        <span className='red'>Rocket</span> <span className='blue'>Race</span>
+      </h3>
+      <a href='https://github.com/Davey-M' target='_blank'>
+        <p>Check out my other projects</p>
+      </a>
+    </footer>
+  );
 }
 export default Footer;

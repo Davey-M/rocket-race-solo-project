@@ -1,5 +1,14 @@
 footer {
-  margin-top: 80px;
-  padding: 20px;
+  margin-top: 20px;
+  padding: 10px;
   text-align: center;
+  background-color: var(--dark-3);
+
+  display: grid;
+  grid-template-columns: 1fr max-content 1fr;
+  align-items: center;
+}
+
+footer a {
+  color: var(--dark-1);
 }
