@@ -407,7 +407,7 @@ function main(socket, gameBoard, user, initialGameState) {
           p.appendChild(getRedRocket());
           p.id = player.id;
 
-          console.log(p);
+          // console.log(p);
 
           board.appendChild(p);
         }
