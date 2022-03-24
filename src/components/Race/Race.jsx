@@ -190,9 +190,12 @@ function main(socket, gameBoard, user, initialGameState) {
   blueRocket.src = './blue-ship.png';
   blueRocket.height = 50;
 
-  const redRocket = document.createElement('img');
-  redRocket.src = './red-ship.png';
-  redRocket.height = 50;
+  function getRedRocket() {
+    const redRocket = document.createElement('img');
+    redRocket.src = './red-ship.png';
+    redRocket.height = 50;
+    return redRocket;
+  }
 
   // setup the player ship on the dom
   const playerShip = document.createElement('div');
@@ -401,8 +404,10 @@ function main(socket, gameBoard, user, initialGameState) {
         } else {
           let p = document.createElement('div');
           p.classList.add('ship');
-          p.appendChild(redRocket);
+          p.appendChild(getRedRocket());
           p.id = player.id;
+
+          console.log(p);
 
           board.appendChild(p);
         }
