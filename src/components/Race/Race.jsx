@@ -358,6 +358,7 @@ function main(socket, gameBoard, user, initialGameState) {
 
   // set up socket listeners
   socket.on('ship-move', drawAllShips);
+  socket.emit('move', player);
 
   // socket.emit('join-game', {
   //   gameCode: 'room',
@@ -520,16 +521,22 @@ function main(socket, gameBoard, user, initialGameState) {
       dom.x += movement.x;
       dom.y += movement.y;
 
-      dom.asteroid.style.marginLeft = `${dom.x}px`;
-      dom.asteroid.style.marginTop = `${dom.y}px`;
-
-      if (dom.x > 700) {
+      if (dom.x > 750) {
+        dom.asteroid.style.transition = 'none';
         dom.x = -100;
       }
 
-      if (dom.y > 1900) {
+      if (dom.y > 1800) {
+        dom.asteroid.style.transition = 'none';
         dom.y = -100;
       }
+
+      dom.asteroid.style.marginLeft = `${dom.x}px`;
+      dom.asteroid.style.marginTop = `${dom.y}px`;
+
+      setTimeout(() => {
+        dom.asteroid.style.transition = 'margin 0.4s linear';
+      }, 1);
 
       // if (checkCollision(player, dom) === true) {
       //   console.log('BOOOM');
@@ -544,7 +551,13 @@ function main(socket, gameBoard, user, initialGameState) {
     player.y = 1950;
     player.x = 200;
 
+    playerShip.style.transition = 'none';
+
     draw();
+
+    setTimeout(() => {
+      playerShip.style.transition = 'margin 0.4s linear, transform 0.2s';
+    }, 1);
   }
 
   let collisionCheckRate = 1000 / 10;
