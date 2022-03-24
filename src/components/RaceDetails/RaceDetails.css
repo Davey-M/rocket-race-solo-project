@@ -2,10 +2,10 @@
   width: 90%;
   max-width: 900px;
   margin: auto;
+  background-color: var(--blue-3);
 }
 
 .race-detail-list {
-  background-color: var(--blue-3);
   /* padding: 10px; */
   padding-bottom: 0.01px;
 }
