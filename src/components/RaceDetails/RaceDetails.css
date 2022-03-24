@@ -6,7 +6,8 @@
 
 .race-detail-list {
   background-color: var(--blue-3);
-  padding: 10px;
+  /* padding: 10px; */
+  padding-bottom: 0.01px;
 }
 
 .race-detail-details {

@@ -39,23 +39,19 @@ function RaceDetails() {
         <div>
           {(() => {
             // this functions formats the time it is invoked immediately
+            let time = new Date(race?.time);
 
-            // split the time and the date
-            let splitTime = race?.time?.split('T').join('Z').split('Z');
+            // console.log(time.getHours());
+            // console.log(time.getMinutes());
 
-            if (!splitTime) return '';
-            // the time is the second part of the split time
-            let timer = splitTime[1].split(':');
-
-            // change to am/pm from army time
-            let amPm = Number(timer[0]) > 12 ? 'PM' : 'AM';
-            let hour = Number(timer[0]) > 12 ? Number(timer[0]) - 12 : timer[0];
-            let time = `${hour}:${timer[1]} ${amPm}`;
+            // console.log(time.toLocaleTimeString());
 
             return (
               <>
-                <p>{splitTime[0]}</p>
-                <p>{time}</p>
+                {/* <p>{splitTime[0]}</p>
+                <p>{time}</p> */}
+                <p>{time.toLocaleDateString()}</p>
+                <p>{time.toLocaleTimeString()}</p>
               </>
             );
           })()}
