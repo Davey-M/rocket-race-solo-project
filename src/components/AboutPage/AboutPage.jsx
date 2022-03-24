@@ -5,6 +5,7 @@ import './AboutPage.css';
 import crowdedImg from './Crowded.jpg';
 import raceImg from './Race.jpg';
 import peaceImg from './Peace.jpg';
+import gamePlayImg from './gameplay-screenshot.png';
 
 // This is one of our simplest components
 // It doesn't have local state,
@@ -38,9 +39,23 @@ function AboutPage() {
       </section>
       <section>
         <h1 className='red-back about-header'>How To Play</h1>
-        <ul>
-          <li></li>
-        </ul>
+        <div className='content'>
+          <div className='story-grid'>
+            <p>
+              <ul>
+                <li>The rocket moves automatically</li>
+                <li>
+                  Steer with "a" & "d" keys or use the right and left arrow keys
+                </li>
+                <li>
+                  Hitting an asteroid will send you back to the start of the
+                  race
+                </li>
+              </ul>
+            </p>
+            <img src={gamePlayImg} alt='' />
+          </div>
+        </div>
       </section>
       <section>
         <h1 className='dark-back about-header'>Acknowledgments</h1>
