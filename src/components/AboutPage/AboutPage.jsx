@@ -1,5 +1,7 @@
 import React from 'react';
 
+import './AboutPage.css';
+
 // This is one of our simplest components
 // It doesn't have local state,
 // It doesn't dispatch any redux actions or display any part of redux state
@@ -7,15 +9,15 @@ import React from 'react';
 
 function AboutPage() {
   return (
-    <div>
+    <div className='about-container'>
       <section>
-        <h1>How To Play</h1>
+        <h1 className='red-back about-header'>How To Play</h1>
       </section>
       <section>
-        <h1>The story of the app</h1>
+        <h1 className='blue-back about-header'>The story of the app</h1>
       </section>
       <section>
-        <h1>Acknowledgments</h1>
+        <h1 className='dark-back about-header'>Acknowledgments</h1>
       </section>
     </div>
   );
