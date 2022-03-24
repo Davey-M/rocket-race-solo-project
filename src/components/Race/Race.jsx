@@ -483,7 +483,7 @@ function main(socket, gameBoard, user, initialGameState) {
     draw();
   }
 
-  let collisionCheckRate = 1000 / 24;
+  let collisionCheckRate = 1000 / 10;
   let collisionDeltaTime = Date.now();
   function watchAstroidCollisions() {
     if (Date.now() - collisionDeltaTime > collisionCheckRate) {
@@ -501,9 +501,8 @@ function main(socket, gameBoard, user, initialGameState) {
           ) + 10,
       };
 
-      // testContext.fillStyle = 'blue';
-      // testContext.fillRect(playerSpot.x, playerSpot.y, 30, 30);
-      // testContext.fillStyle = 'red';
+      testContext.fillStyle = 'blue';
+      testContext.fillRect(playerSpot.x, playerSpot.y, 30, 30);
 
       for (let a of asteroidDOM) {
         let position = {
@@ -515,7 +514,8 @@ function main(socket, gameBoard, user, initialGameState) {
           ),
         };
 
-        // testContext.fillRect(position.x - 25, position.y - 25, 50, 50);
+        testContext.fillStyle = 'red';
+        testContext.fillRect(position.x, position.y, 50, 50);
 
         if (checkCollision(playerSpot, position) === true) {
           transportPlayerToStart();
@@ -531,14 +531,11 @@ function main(socket, gameBoard, user, initialGameState) {
   // we will be checking whether or not a is inside b
   function checkCollision(a, b) {
     return (
-      (a.x >= b.x - 25 &&
-        a.x <= b.x + 25 &&
-        a.y >= b.y - 25 &&
-        a.y <= b.y + 25) ||
-      (a.x + 30 >= b.x - 25 &&
-        a.x + 30 <= b.x + 25 &&
-        a.y + 30 >= b.y - 25 &&
-        a.y + 30 <= b.y + 25)
+      (a.x >= b.x && a.x <= b.x + 50 && a.y >= b.y && a.y <= b.y + 50) ||
+      (a.x + 30 >= b.x &&
+        a.x + 30 <= b.x + 50 &&
+        a.y + 30 >= b.y &&
+        a.y + 30 <= b.y + 50)
     );
   }
 
