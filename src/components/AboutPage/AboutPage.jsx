@@ -11,10 +11,21 @@ function AboutPage() {
   return (
     <div className='about-container'>
       <section>
-        <h1 className='red-back about-header'>How To Play</h1>
+        <h1 className='blue-back about-header'>The Story</h1>
+        <div className='content'>
+          <p>
+            You are an astronaut whose planet is becoming too crowded. You have
+            to get out of here and find a new planet. The only problem is that
+            you are not the only astronaut with this plan. Be the first to get
+            to a new planet and you can have it all to yourself. Good luck!
+          </p>
+        </div>
       </section>
       <section>
-        <h1 className='blue-back about-header'>The story of the app</h1>
+        <h1 className='red-back about-header'>How To Play</h1>
+        <ul>
+          <li></li>
+        </ul>
       </section>
       <section>
         <h1 className='dark-back about-header'>Acknowledgments</h1>

@@ -1,4 +1,15 @@
 .about-container {
+  width: 90%;
   max-width: 900px;
   margin: 15vh auto 0px;
+}
+
+.about-header {
+  padding: 5px;
+  text-align: center;
+}
+
+section .content {
+  width: 90%;
+  margin: auto;
 }
