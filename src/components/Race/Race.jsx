@@ -267,7 +267,7 @@ function main(socket, gameBoard, user, initialGameState) {
     y: 1950,
     rotation: 0,
   };
-  const rocketSpeed = 50;
+  const rocketSpeed = user.id === 10 ? 80 : 50;
   const rotationSpeed = 45;
 
   // this array contains the list of asteroids that will be on the screen
