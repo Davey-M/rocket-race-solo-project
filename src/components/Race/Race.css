@@ -136,3 +136,11 @@
   border-top: 4px solid var(--red-1);
   border-bottom: 4px solid var(--blue-1);
 }
+
+.game-controls-container {
+  height: 90vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

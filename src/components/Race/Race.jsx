@@ -4,6 +4,9 @@ import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 import './Race.css';
 
+import beachImage from '../AboutPage/Peace.jpg';
+import crowdedImage from '../AboutPage/Crowded.jpg';
+
 function Race() {
   const history = useHistory();
 
@@ -16,6 +19,7 @@ function Race() {
   const [finished, setFinished] = useState(false);
   const [started, setStarted] = useState(false);
   const [game, setGame] = useState(null);
+  const [loadingDots, setLoadingDots] = useState('.');
 
   const [gameCodeValue, setGameCodeValue] = useState('');
 
@@ -44,6 +48,20 @@ function Race() {
       socket?.removeAllListeners('game-started');
     };
   }, [socket]);
+
+  useEffect(() => {
+    let dotInterval = setInterval(() => {
+      if (loadingDots.length > 3) {
+        setLoadingDots('.');
+      } else {
+        setLoadingDots(loadingDots + '.');
+      }
+    }, 500);
+
+    return () => {
+      clearInterval(dotInterval);
+    };
+  }, [loadingDots]);
 
   useEffect(() => {
     if (!started) return;
@@ -94,29 +112,53 @@ function Race() {
   return (
     <>
       {finished ? (
-        <div>
-          <h1>Finished</h1>
-          <button onClick={goToHome}>New Game</button>
+        <div className='game-controls-container'>
           <div>
-            {game.players
-              .sort((a, b) => {
-                if (a.finishTime === undefined) {
-                  return 1;
-                }
-                if (b.finishTime === undefined) {
-                  return -1;
-                }
-                return a.finishTime - b.finishTime;
-              })
-              .map((p, index) => {
-                return (
-                  <p key={index}>
-                    {p?.finishTime &&
-                      ((p.finishTime - game.startTime) / 1000).toFixed(3)}{' '}
-                    {p.username} {index + 1}
-                  </p>
-                );
-              })}
+            {game.players.sort((a, b) => {
+              if (a.finishTime === undefined) {
+                return 1;
+              }
+              if (b.finishTime === undefined) {
+                return -1;
+              }
+              return a.finishTime - b.finishTime;
+            })[0].id === socket.id ? (
+              <img src={beachImage} alt='winning image' width={500} />
+            ) : (
+              <img src={crowdedImage} alt='losing image' width={500} />
+            )}
+            <h1>Finished!</h1>
+            <button onClick={goToHome}>New Game</button>
+            <div>
+              <h3>Players:</h3>
+              {game.players
+                .sort((a, b) => {
+                  if (a.finishTime === undefined) {
+                    return 1;
+                  }
+                  if (b.finishTime === undefined) {
+                    return -1;
+                  }
+                  return a.finishTime - b.finishTime;
+                })
+                .map((p, index) => {
+                  return (
+                    <p key={index}>
+                      <span className={socket.id === p.id ? 'blue' : 'red'}>
+                        {p.finishTime && index + 1 + '.'}
+                      </span>{' '}
+                      <b>{p.username}</b>{' '}
+                      {p?.finishTime ? (
+                        '- ' +
+                        ((p.finishTime - game.startTime) / 1000).toFixed(3) +
+                        ' seconds'
+                      ) : (
+                        <span>{loadingDots}</span>
+                      )}
+                    </p>
+                  );
+                })}
+            </div>
           </div>
         </div>
       ) : (
@@ -142,33 +184,40 @@ function Race() {
               </div>
             </>
           ) : (
-            <>
-              <button onClick={handleGameCreate}>Create Game</button>
-
-              <div>
-                <input
-                  type='text'
-                  placeholder='Game Code'
-                  value={gameCodeValue}
-                  onChange={(e) => setGameCodeValue(e.target.value)}
-                />
-                <button onClick={handleGameJoin}>Join Game</button>
-              </div>
-
-              {game && (
-                <>
-                  <h1>{game.gameCode}</h1>
-                  {game.players[0].id === socket.id && (
+            <div className='game-controls-container'>
+              {game ? (
+                <div>
+                  <h1 className='very-big'>{game.gameCode}</h1>
+                  {game.players[0].id === socket.id ? (
                     <button onClick={handleGameStart}>Start Game</button>
+                  ) : (
+                    <p>Waiting for host to start the game...</p>
                   )}
                   <div>
-                    {game?.players.map((p, index) => {
-                      return <p key={index}>{p.username}</p>;
-                    })}
+                    <h3>players:</h3>
+                    <ul>
+                      {game?.players.map((p, index) => {
+                        return <li key={index}>{p.username}</li>;
+                      })}
+                    </ul>
                   </div>
-                </>
+                </div>
+              ) : (
+                <div>
+                  <button onClick={handleGameCreate}>Create Game</button>
+
+                  <div>
+                    <input
+                      type='text'
+                      placeholder='Game Code'
+                      value={gameCodeValue}
+                      onChange={(e) => setGameCodeValue(e.target.value)}
+                    />
+                    <button onClick={handleGameJoin}>Join Game</button>
+                  </div>
+                </div>
               )}
-            </>
+            </div>
           )}
         </>
       )}
