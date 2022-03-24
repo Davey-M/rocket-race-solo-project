@@ -45,7 +45,8 @@ function AboutPage() {
               <ul>
                 <li>The rocket moves automatically</li>
                 <li>
-                  Steer with "a" & "d" keys or use the right and left arrow keys
+                  Steer with "a" & "d" keys or use the "right" & "left" arrow
+                  keys
                 </li>
                 <li>
                   Hitting an asteroid will send you back to the start of the
