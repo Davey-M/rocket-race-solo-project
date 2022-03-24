@@ -30,7 +30,8 @@
 .game-board.canvas {
   background-color: transparent;
   z-index: 10;
-  /* opacity: 0; */
+  /* comment out the display: none; to view the collision boundaries */
+  display: none;
 }
 
 .game-board-stars {
