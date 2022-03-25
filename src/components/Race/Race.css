@@ -131,6 +131,7 @@
   overflow: hidden;
 
   background-color: var(--dark-3);
+  /* background-color: black; */
 }
 
 .place-marker {
@@ -142,6 +143,8 @@
   margin-left: 10px;
 
   transition: margin 0.4s linear;
+
+  color: var(--dark-1);
 }
 
 .timer-container {

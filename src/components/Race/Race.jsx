@@ -306,8 +306,8 @@ function main(socket, gameBoard, user, initialGameState) {
   for (let p of initialGameState.players) {
     const pElement = document.createElement('p');
     pElement.classList.add('place-marker');
-    pElement.textContent = '-' + p.username;
-    pElement.style.color = `hsl(${p.color}, 78%, 67%)`;
+    pElement.innerHTML = `<span style='border-bottom: 2px solid hsl(${p.color}, 78%, 67%);' >-${p.username}</span>`;
+    // pElement.style.color = `hsl(${p.color}, 78%, 67%)`;
 
     positionContainer.appendChild(pElement);
 
