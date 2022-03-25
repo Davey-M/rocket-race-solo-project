@@ -5,7 +5,7 @@ import './AboutPage.css';
 import crowdedImg from './Crowded.jpg';
 import raceImg from './Race.jpg';
 import peaceImg from './Peace.jpg';
-import gamePlayImg from './gameplay-screenshot.png';
+import gamePlayImg from './in-progress-race.png';
 
 // This is one of our simplest components
 // It doesn't have local state,
