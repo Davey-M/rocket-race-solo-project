@@ -10,6 +10,7 @@ function socketHandler(socket, io) {
   socket.on('disconnect', () => {
     games[currentGameCode]?.players.filter((s) => s.id !== socket.id);
 
+    socket.leave(currentGameCode);
     emitGame(currentGameCode);
   })
 
@@ -18,6 +19,7 @@ function socketHandler(socket, io) {
 
     games[currentGameCode].players = games[currentGameCode]?.players.filter((s) => s.id !== socket.id);
 
+    socket.leave(currentGameCode);
     emitGame(currentGameCode);
   })
 

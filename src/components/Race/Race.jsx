@@ -107,7 +107,14 @@ function Race() {
   };
 
   const goToHome = () => {
-    history.push('/home');
+    // history.push('/home');
+    setFinished(false);
+    setStarted(false);
+    setGame(null);
+    setLoadingDots('.');
+    setGameCodeValue('');
+
+    socket.emit('leave');
   };
 
   // console.log({ game });
