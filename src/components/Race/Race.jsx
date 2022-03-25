@@ -536,7 +536,7 @@ function main(socket, gameBoard, user, initialGameState) {
 
       setTimeout(() => {
         dom.asteroid.style.transition = 'margin 0.4s linear';
-      }, 1);
+      }, 200);
 
       // if (checkCollision(player, dom) === true) {
       //   console.log('BOOOM');
