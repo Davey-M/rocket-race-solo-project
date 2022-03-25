@@ -239,10 +239,19 @@ function main(socket, gameBoard, user, initialGameState) {
   blueRocket.src = './blue-ship.png';
   blueRocket.height = 50;
 
-  function getRedRocket() {
+  function getRocketParts() {
+    const rocket = document.createElement('img');
+    rocket.classList.add('overlay-image');
+    rocket.src = './ShipParts.png';
+    rocket.height = 50;
+    return rocket;
+  }
+
+  function getRedRocket(color = 7) {
     const redRocket = document.createElement('img');
-    redRocket.src = './red-ship.png';
+    redRocket.src = './shipColor.png';
     redRocket.height = 50;
+    redRocket.style.filter = `hue-rotate(${color}deg)`;
     return redRocket;
   }
 
@@ -484,7 +493,8 @@ function main(socket, gameBoard, user, initialGameState) {
           let p = document.createElement('div');
           p.classList.add('ship');
           p.insertAdjacentHTML('afterbegin', `<p>${player.username}</p>`);
-          p.appendChild(getRedRocket());
+          p.appendChild(getRocketParts());
+          p.appendChild(getRedRocket(60));
           p.id = player.id;
 
           // console.log(p);
