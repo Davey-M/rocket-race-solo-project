@@ -45,9 +45,6 @@ app.use('/api/profile', profileRouter);
 app.use('/api/leaderboard', leaderboardRouter);
 app.use('/api/edit', editRouter);
 
-const insertRouter = require('./routes/insert.data.router');
-app.use('/api/insert', insertRouter);
-
 // Serve static files
 app.use(express.static('build'));
 
