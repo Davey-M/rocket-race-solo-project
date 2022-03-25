@@ -23,7 +23,10 @@ function Footer() {
 function FooterContent() {
   return (
     <footer>
-      <a href='mailto:davey.meuer@gmail.com'>
+      <a
+        href='https://www.linkedin.com/in/david-meuer-218611152/overlay/contact-info/'
+        target='_blank'
+      >
         <p>Contact Me</p>
       </a>
       <h3>

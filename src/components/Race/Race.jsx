@@ -108,7 +108,7 @@ function Race() {
     history.push('/home');
   };
 
-  console.log({ game });
+  // console.log({ game });
   return (
     <>
       {finished ? (
@@ -249,6 +249,7 @@ function main(socket, gameBoard, user, initialGameState) {
   // setup the player ship on the dom
   const playerShip = document.createElement('div');
   playerShip.classList.add('ship');
+  // playerShip.insertAdjacentHTML('afterbegin', `<p>${user.username}</p>`);
   playerShip.appendChild(blueRocket);
 
   // setup the stars background DOM reference
@@ -470,6 +471,11 @@ function main(socket, gameBoard, user, initialGameState) {
           playerElement.style.marginTop = `${player.y}px`;
           playerElement.style.transform = `rotate(${player.rotation}deg)`;
 
+          // set the rotation of the username
+          playerElement.children[0].style.transform = `rotate(${
+            360 - player.rotation
+          }deg)`;
+
           setTimeout(() => {
             playerElement.style.transition =
               'margin 0.4s linear, transform 0.2s';
@@ -477,6 +483,7 @@ function main(socket, gameBoard, user, initialGameState) {
         } else {
           let p = document.createElement('div');
           p.classList.add('ship');
+          p.insertAdjacentHTML('afterbegin', `<p>${player.username}</p>`);
           p.appendChild(getRedRocket());
           p.id = player.id;
 

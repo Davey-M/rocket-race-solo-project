@@ -62,8 +62,26 @@
   transition: margin 0.4s linear, transform 0.2s;
 }
 
+.ship p {
+  position: absolute;
+  top: 100%;
+  text-align: center;
+  /* transform: translateX(-50%); */
+  color: var(--dark-3);
+
+  transition: transform 0.2s;
+}
+
 .ship img {
   height: 50px;
+
+  /* filter: hue-rotate(180deg); */
+}
+
+.ship .overlay-image {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 @keyframes spin {
