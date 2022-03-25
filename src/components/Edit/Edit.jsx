@@ -35,6 +35,13 @@ function Edit() {
     });
   };
 
+  const handleColor = (e) => {
+    dispatch({
+      type: 'SET_COLOR',
+      payload: e.target.value,
+    });
+  };
+
   useEffect(() => {
     dispatch({
       type: 'GET_EDIT',
@@ -75,6 +82,30 @@ function Edit() {
             value={edit.about}
             onChange={handleAbout}
           ></textarea>
+        </div>
+        <p>Ship Color:</p>
+        <div className='colorContainer'>
+          <input
+            type='range'
+            min={0}
+            max={360}
+            value={edit.color}
+            onChange={handleColor}
+          />
+          <div className='ship-color-demo'>
+            <img
+              src='shipColor.png'
+              alt='Ship Color Image'
+              style={{
+                filter: `hue-rotate(${edit.color}deg)`,
+              }}
+            />
+            <img
+              className='overlay-image'
+              src='ShipParts.png'
+              alt='Ship Parts Image'
+            />
+          </div>
         </div>
         <div className='button-container'>
           <button type='submit'>Save</button>

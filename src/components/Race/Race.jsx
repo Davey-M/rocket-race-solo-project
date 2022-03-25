@@ -77,6 +77,7 @@ function Race() {
     socket?.emit('create-game', {
       id: socket.id,
       username: user.username,
+      color: user.color,
       x: 200,
       y: 1950,
       rotation: 0,
@@ -97,6 +98,7 @@ function Race() {
       playerState: {
         id: socket.id,
         username: user.username,
+        color: user.color,
         x: 200,
         y: 1950,
         rotation: 0,
@@ -248,7 +250,7 @@ function main(socket, gameBoard, user, initialGameState) {
     return rocket;
   }
 
-  function getRedRocket(color = 7) {
+  function getRedRocket(color) {
     const redRocket = document.createElement('img');
     redRocket.src = './shipColor.png';
     redRocket.height = 50;
@@ -305,12 +307,7 @@ function main(socket, gameBoard, user, initialGameState) {
     const pElement = document.createElement('p');
     pElement.classList.add('place-marker');
     pElement.textContent = '-' + p.username;
-
-    if (p.id === socket.id) {
-      pElement.style.color = 'var(--blue-1)';
-    } else {
-      pElement.style.color = 'var(--red-1)';
-    }
+    pElement.style.color = `hsl(${p.color}, 78%, 67%)`;
 
     positionContainer.appendChild(pElement);
 
@@ -334,6 +331,7 @@ function main(socket, gameBoard, user, initialGameState) {
   let player = {
     id: socket.id,
     username: user.username,
+    color: user.color,
     x: 200,
     y: 1950,
     rotation: 0,
@@ -496,7 +494,8 @@ function main(socket, gameBoard, user, initialGameState) {
           p.classList.add('ship');
           p.insertAdjacentHTML('afterbegin', `<p>${player.username}</p>`);
           p.appendChild(getRocketParts());
-          p.appendChild(getRedRocket(60));
+          console.log(player.color);
+          p.appendChild(getRedRocket(player.color));
           p.id = player.id;
 
           // console.log(p);
