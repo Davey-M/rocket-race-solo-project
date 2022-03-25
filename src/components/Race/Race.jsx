@@ -458,9 +458,22 @@ function main(socket, gameBoard, user, initialGameState) {
         let playerElement = document.getElementById(player.id);
 
         if (playerElement) {
+          if (
+            Math.abs(
+              player.y - Number(playerElement.style.marginTop.split('px')[0]),
+            ) > 100
+          ) {
+            playerElement.style.transition = 'none';
+          }
+
           playerElement.style.marginLeft = `${player.x}px`;
           playerElement.style.marginTop = `${player.y}px`;
           playerElement.style.transform = `rotate(${player.rotation}deg)`;
+
+          setTimeout(() => {
+            playerElement.style.transition =
+              'margin 0.4s linear, transform 0.2s';
+          }, 200);
         } else {
           let p = document.createElement('div');
           p.classList.add('ship');
