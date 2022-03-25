@@ -236,7 +236,8 @@ function main(socket, gameBoard, user, initialGameState) {
 
   // setup the images we will use
   const blueRocket = document.createElement('img');
-  blueRocket.src = './blue-ship.png';
+  blueRocket.src = './shipColor.png';
+  blueRocket.style.filter = `hue-rotate(${user.color}deg)`;
   blueRocket.height = 50;
 
   function getRocketParts() {
@@ -259,6 +260,7 @@ function main(socket, gameBoard, user, initialGameState) {
   const playerShip = document.createElement('div');
   playerShip.classList.add('ship');
   // playerShip.insertAdjacentHTML('afterbegin', `<p>${user.username}</p>`);
+  playerShip.appendChild(getRocketParts());
   playerShip.appendChild(blueRocket);
 
   // setup the stars background DOM reference
