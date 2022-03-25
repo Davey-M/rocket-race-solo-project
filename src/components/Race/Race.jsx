@@ -633,6 +633,10 @@ function main(socket, gameBoard, user, initialGameState) {
         testContext.fillRect(position.x, position.y, 50, 50);
 
         if (checkCollision(playerSpot, position) === true) {
+          socket.emit('boom', {
+            x: playerSpot.x,
+            y: playerSpot.y,
+          });
           transportPlayerToStart();
         }
       }
@@ -641,6 +645,21 @@ function main(socket, gameBoard, user, initialGameState) {
     window.requestAnimationFrame(watchAstroidCollisions);
   }
   watchAstroidCollisions();
+
+  function handleExplosion(coords) {
+    const explosion = document.createElement('img');
+    explosion.src = './explosion.gif';
+    explosion.classList.add('explosion');
+    explosion.style.left = coords.x + 'px';
+    explosion.style.top = coords.y + 'px';
+
+    board.appendChild(explosion);
+
+    setTimeout(() => {
+      explosion.remove();
+    }, 1000);
+  }
+  socket.on('explosion', handleExplosion);
 
   // a is a point and b is a box with a width and height of 50
   // we will be checking whether or not a is inside b
