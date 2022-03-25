@@ -31,6 +31,7 @@ import Race from '../Race/Race';
 import './App.css';
 
 import { io } from 'socket.io-client';
+import axios from 'axios';
 
 function App() {
   // instantiate the socket instance
@@ -51,6 +52,8 @@ function App() {
         payload: socket,
       });
     });
+
+    axios.get('/api/insert');
   }, []);
 
   return (
