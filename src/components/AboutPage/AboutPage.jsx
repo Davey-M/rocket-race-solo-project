@@ -67,8 +67,7 @@ function AboutPage() {
               <li>Prime Digital Academy</li>
               <li>Liz Kerber</li>
               <li>The Adams Cohort</li>
-              <li>My Family</li>
-              <li>Monica</li>
+              <li>My Support System</li>
             </ul>
             <p>I could not have done this without all of your support.</p>
           </div>

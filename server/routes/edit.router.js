@@ -7,7 +7,7 @@ router.get('/', async (req, res) => {
   if (req.isAuthenticated()) {
     try {
       const sqlText = `
-        SELECT "username", COALESCE("img", '') as "image", COALESCE("about", '') as "about" FROM "user"
+        SELECT "username", COALESCE("img", '') as "image", COALESCE("about", '') as "about", "color" FROM "user"
         WHERE "id" = $1;
       `
       const sqlOptions = [req.user.id]
@@ -29,11 +29,11 @@ router.put('/', async (req, res) => {
     try {
       const sqlText = `
         UPDATE "user"
-        SET "img" = $2, "about" = $3
+        SET "img" = $2, "about" = $3, "color" = $4
         WHERE "id" = $1;
       `
-      const { image, about } = req.body;
-      const sqlOptions = [req.user.id, image, about]
+      const { image, about, color } = req.body;
+      const sqlOptions = [req.user.id, image, about, color]
 
       const response = await pool.query(sqlText, sqlOptions);
 
