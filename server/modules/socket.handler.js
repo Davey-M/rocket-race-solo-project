@@ -98,6 +98,10 @@ function socketHandler(socket, io) {
     io.to(currentGameCode).emit('race-finished', games[currentGameCode]);
   })
 
+  socket.on('boom', (coords) => {
+    io.to(currentGameCode).emit('explosion', coords);
+  })
+
   function emitGame(gameCode) {
     io.to(gameCode).emit('ship-move', games[gameCode])
   }

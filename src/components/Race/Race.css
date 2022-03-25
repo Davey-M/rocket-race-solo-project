@@ -167,3 +167,15 @@
   justify-content: center;
   align-items: center;
 }
+
+.explosion {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  transform: translate(-50%, -50%);
+
+  width: 150px;
+
+  z-index: 5;
+}
