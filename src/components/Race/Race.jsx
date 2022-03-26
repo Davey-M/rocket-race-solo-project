@@ -352,6 +352,9 @@ function main(socket, gameBoard, user, initialGameState) {
   // this is used to figure out which movement pattern we are using.
   let asteroidIndex = 0;
 
+  // this variable is used for pausing and playing the game.
+  let gamePaused = false;
+
   // the draw function will move the ships whenever needed
   function draw() {
     playerShip.style.marginLeft = `${player.x}px`;
@@ -414,13 +417,15 @@ function main(socket, gameBoard, user, initialGameState) {
           // player.y = 1950;
           // player.x = 200;
           // player.rotation = 0;
-        } else if (player.y < -50) {
+        } else if (player.y < -80) {
           socket.emit('finish-game', {
             id: socket.id,
             username: user.username,
             user_id: user.id,
             finishTime: Date.now(),
           });
+
+          gamePaused = true;
 
           clearInterval(moveInterval);
           return true;
@@ -642,7 +647,9 @@ function main(socket, gameBoard, user, initialGameState) {
       }
     }
     // console.log(playerSpot);
-    window.requestAnimationFrame(watchAstroidCollisions);
+    if (!gamePaused) {
+      window.requestAnimationFrame(watchAstroidCollisions);
+    }
   }
   watchAstroidCollisions();
 
@@ -682,8 +689,11 @@ function main(socket, gameBoard, user, initialGameState) {
 
     // remove the socket listeners
     socket.removeAllListeners('ship-move');
+    socket.removeAllListeners('explosion');
 
     // leave the game when we leave the page
     socket.emit('leave');
+
+    gamePaused = true;
   }
 }
