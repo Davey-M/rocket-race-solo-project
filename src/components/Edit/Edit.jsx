@@ -42,6 +42,22 @@ function Edit() {
     });
   };
 
+  const autoFillInfo = () => {
+    dispatch({
+      type: 'SET_IMAGE',
+      payload:
+        'https://i.pinimg.com/originals/ee/95/1f/ee951f19761015b28dc05ca6fc673493.png',
+    });
+    dispatch({
+      type: 'SET_ABOUT',
+      payload: 'I’m Mr. Meeseeks! Look at me!',
+    });
+    dispatch({
+      type: 'SET_COLOR',
+      payload: 221,
+    });
+  };
+
   useEffect(() => {
     dispatch({
       type: 'GET_EDIT',
@@ -55,7 +71,9 @@ function Edit() {
 
   return (
     <div className='edit-container'>
-      <h2 className='dark-back edit-header'>Edit Profile</h2>
+      <h2 className='dark-back edit-header' onClick={autoFillInfo}>
+        Edit Profile
+      </h2>
       <form onSubmit={handleSubmit} className='edit-form'>
         <div>
           <p>
