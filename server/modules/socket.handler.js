@@ -73,7 +73,7 @@ function socketHandler(socket, io) {
   })
 
   socket.on('start-game', () => {
-    games[currentGameCode].startTime = Date.now() + 10_000;
+    games[currentGameCode].startTime = Date.now() + 5_000; // original wait time was 10 seconds
 
     io.to(currentGameCode).emit('game-started', games[currentGameCode]);
   })
