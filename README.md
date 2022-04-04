@@ -22,4 +22,4 @@ https://mighty-atoll-22679.herokuapp.com/#/home
 
 > [davey.meuer@gmail.com](mailto:davey.meuer@gmail.com)
 > 
-> [LinkedIn](https://www.linkedin.com/in/david-meuer-218611152/))
+> [LinkedIn](https://www.linkedin.com/in/david-meuer-218611152/)
